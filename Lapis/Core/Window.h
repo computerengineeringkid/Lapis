@@ -21,6 +21,7 @@ public:
 	HWND& GetWindow() { return m_hWnd; }
 	int GetWindowWidth() { return m_Width; }
 	int GetWindowHeight() { return m_Height; }
+	bool IsKeyDown(int vKey);
 
 private:
 	HINSTANCE m_hInstance;

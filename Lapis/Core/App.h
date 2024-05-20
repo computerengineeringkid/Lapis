@@ -5,6 +5,7 @@
 #include <dxgi.h>
 #include <D3Dcompiler.h>
 #include <wrl.h>
+#include <DirectXMath.h>
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "D3DCompiler.lib")
@@ -29,9 +30,12 @@ public:
 	void DrawTestTriangle();
 	void CreateDepthBuffer();
 protected:
-	
+	void UpdateConstantBuffer(const DirectX::XMMATRIX& viewMatrix, const DirectX::XMMATRIX& projectionMatrix);
+
 	bool InitDirect3D();
 	void CalculateFrameStats();
+	void ProcessInput();
+	bool IsKeyDown(int key);
 
 protected:
 	std::unique_ptr<class Window> m_Window;
@@ -51,8 +55,9 @@ protected:
 	wrl::ComPtr<ID3D11RenderTargetView> m_RenderTargetView;
 	wrl::ComPtr<ID3D11DepthStencilView> m_DepthStencilView;
 	wrl::ComPtr<ID3D11DepthStencilState> m_DepthStencilState;
+	wrl::ComPtr<ID3D11Buffer> m_ConstantBuffer;
 	D3D11_VIEWPORT m_ScreenViewport;
-
+	class Camera* m_Camera;
 	D3D_DRIVER_TYPE m_D3dDriverType;
 	int m_ClientWidth, m_ClientHeight;
 	bool m_Enable4xMsaa;

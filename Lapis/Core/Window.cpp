@@ -80,4 +80,10 @@ bool Window::ProcessMessages()
 	return true;
 }
 
+bool Window::IsKeyDown(int vKey)
+{
+	return(GetAsyncKeyState(vKey) & 0x8000) != 0;
+}
+
+
 

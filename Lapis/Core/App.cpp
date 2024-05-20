@@ -2,6 +2,7 @@
 #include "Window.h"
 #include <iostream>
 #include <string>
+#include "Camera.h"
 
 App::App()
 {
@@ -17,6 +18,7 @@ int App::Run()
         {
             running = false;
         }
+        ProcessInput();
         DrawScene();
 
     }
@@ -28,6 +30,7 @@ bool App::Init()
     m_Window = std::make_unique<Window>();
     m_ClientWidth = m_Window->GetWindowWidth();
     m_ClientHeight = m_Window->GetWindowHeight();
+    m_Camera = new Camera(AspectRatio());
     InitDirect3D();
     return true;
     
@@ -149,13 +152,75 @@ void App::CreateDepthBuffer()
     m_DeviceContext->OMGetDepthStencilState(m_DepthStencilState.GetAddressOf(), 0);
 }
 
+void App::UpdateConstantBuffer(const DirectX::XMMATRIX& viewMatrix, const DirectX::XMMATRIX& projectionMatrix)
+{
+    struct ConstantBuffer {
+        DirectX::XMMATRIX view;
+        DirectX::XMMATRIX projection;
+    }cb;
+    cb.view = DirectX::XMMatrixTranspose(viewMatrix);
+    cb.projection = DirectX::XMMatrixTranspose(projectionMatrix);
+    if (m_ConstantBuffer)
+    {
+        m_DeviceContext->UpdateSubresource(m_ConstantBuffer.Get(), 0, nullptr, &cb, 0, 0);
+        m_DeviceContext->VSSetConstantBuffers(0, 1, m_ConstantBuffer.GetAddressOf());
+
+    }
+}
+
 void App::CalculateFrameStats()
 {
 }
 
+void App::ProcessInput()
+{
+    const float speed = 0.01f;
+    const float rotationSpeed = 0.01f;
+    DirectX::XMVECTOR forward = DirectX::XMVectorSet(0.0f, 0.0f, speed, 0.0f);
+    DirectX::XMVECTOR backward = DirectX::XMVectorSet(0.0f, 0.0f, -speed, 0.0f);
+    DirectX::XMVECTOR right = DirectX::XMVectorSet(-speed, 0.0f,0.0f, 0.0f);
+    DirectX::XMVECTOR left = DirectX::XMVectorSet(speed, 0.0f,0.0f, 0.0f);
+    DirectX::XMVECTOR up = DirectX::XMVectorSet(0.0f, -speed,0.0f, 0.0f);
+    DirectX::XMVECTOR down = DirectX::XMVectorSet(0.0f,speed,0.0f, 0.0f);
+    if (IsKeyDown(0x51))
+    {
+        m_Camera->Move(forward);
+    }
+    if (IsKeyDown(0x45))
+    {
+        m_Camera->Move(backward);
+    }
+    if (IsKeyDown(VK_RIGHT))
+    {
+        m_Camera->Move(right);
+    }
+    if (IsKeyDown(VK_LEFT))
+    {
+        m_Camera->Move(left);
+    }
+    if (IsKeyDown(VK_UP))
+    {
+        m_Camera->Move(up);
+    } if (IsKeyDown(VK_DOWN))
+    {
+        m_Camera->Move(down);
+    }
+}
+
+bool App::IsKeyDown(int key)
+{
+    return m_Window->IsKeyDown(key);
+}
+
 void App::RenderFrame()
 {
+    
     ClearBuffers();
+    // Example matrices, replace with actual camera matrices
+    DirectX::XMMATRIX viewMatrix = m_Camera->GetViewMatrix();
+    DirectX::XMMATRIX projectionMatrix = m_Camera->GetProjectionMatrix();
+
+    UpdateConstantBuffer(viewMatrix, projectionMatrix);
     DrawTestTriangle();
     EndFrame();
     
@@ -180,15 +245,28 @@ void App::DrawTestTriangle()
     wrl::ComPtr<ID3D11Buffer> pVertexBuffer;
     wrl::ComPtr<ID3D11Buffer> pIndexBuffer;
     struct Vertex {
-        float x, y;
+        DirectX::XMFLOAT3 pos; 
+        DirectX::XMFLOAT4 color;
     };
     const Vertex vertices[] =
     {
-        {0.0f, 0.5f},
-        {0.5f, -0.5f},
-        {-0.5f, -0.5f}
+        {{-0.5f, -0.5f, -0.5f}, {1.0f, 1.0f, 0.0f, 1.0f}}, // Vertex 0
+        {{0.5f, -0.5f, -0.5f}, {0.0f, 1.0f, 1.0f, 1.0f}},  // Vertex 1
+        {{0.5f, 0.5f, -0.5f}, {0.0f, 1.0f, 1.0f, 1.0f}},   // Vertex 2
+        {{-0.5f, 0.5f, -0.5f}, {1.0f, 1.0f, 1.0f, 1.0f}},  // Vertex 3
+        {{-0.5f, -0.5f, 0.5f}, {1.0f, 1.0f, 1.0f, 1.0f}},  // Vertex 4
+        {{0.5f, -0.5f, 0.5f}, {0.0f, 1.0f, 1.0f, 1.0f}},   // Vertex 5
+        {{0.5f, 0.5f, 0.5f}, {1.0f, 1.0f, 1.0f, 1.0f}},    // Vertex 6
+        {{-0.5f, 0.5f, 0.5f}, {0.5f, 0.5f, 0.5f, 1.0f}}    // Vertex 7
     };
-    unsigned int indicies[] = { 0, 1, 2 };
+    unsigned int indices[] = {
+    0, 1, 2, 0, 2, 3, // Front face
+    4, 6, 5, 4, 7, 6, // Back face
+    4, 5, 1, 4, 1, 0, // Bottom face
+    3, 2, 6, 3, 6, 7, // Top face
+    1, 5, 6, 1, 6, 2, // Right face
+    4, 0, 3, 4, 3, 7  // Left face
+    };
     D3D11_BUFFER_DESC bd = {};
     bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
     bd.Usage = D3D11_USAGE_DEFAULT;
@@ -201,15 +279,32 @@ void App::DrawTestTriangle()
 
     D3D11_BUFFER_DESC ibd = {};
     ibd.Usage = D3D11_USAGE_DEFAULT;
-    ibd.ByteWidth = sizeof(indicies);
+    ibd.ByteWidth = sizeof(indices);
     ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
     ibd.CPUAccessFlags = 0u;
     ibd.MiscFlags = 0u;
     
     D3D11_SUBRESOURCE_DATA isd = {};
-    isd.pSysMem = indicies;
+    isd.pSysMem = indices;
     isd.SysMemPitch = 0;
     isd.SysMemSlicePitch = 0;
+
+    struct ConstantBuffer {
+        DirectX::XMMATRIX view;
+        DirectX::XMMATRIX projection;
+    };
+    D3D11_BUFFER_DESC cbd = {};
+    cbd.Usage = D3D11_USAGE_DEFAULT;
+    cbd.ByteWidth = sizeof(ConstantBuffer);
+    cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    cbd.CPUAccessFlags = 0;
+    cbd.MiscFlags = 0;
+    cbd.StructureByteStride = 0;
+
+    hr = m_Device->CreateBuffer(&bd, nullptr, &m_ConstantBuffer);
+    if (FAILED(hr)) {
+        std::cerr << "Failed to create constant buffer. HRESULT: " << hr << std::endl;
+    }
 
     hr = m_Device->CreateBuffer(&ibd, &isd, pIndexBuffer.GetAddressOf());
     if (FAILED(hr))
@@ -252,8 +347,10 @@ void App::DrawTestTriangle()
     wrl::ComPtr<ID3D11InputLayout> pInputLayout;
     const D3D11_INPUT_ELEMENT_DESC ied[] =
     {
-        {"POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+        {"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+        {"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}  
     };
+
     m_Device->CreateInputLayout(
         ied, (UINT)std::size(ied),
         pBlob->GetBufferPointer(),
@@ -266,7 +363,7 @@ void App::DrawTestTriangle()
     
 
     m_DeviceContext->Draw((UINT)std::size(vertices), 0u);
-    m_DeviceContext->DrawIndexed((UINT)std::size(indicies), 0, 0);
+    m_DeviceContext->DrawIndexed((UINT)std::size(indices), 0, 0);
 }
 
 
