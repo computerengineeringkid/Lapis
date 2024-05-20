@@ -1,18 +1,21 @@
 #include <iostream>
 #include "Window.h"
+#include "App.h"
 
 int main()
 {
+	App* pApp = new App();
 	
-	Window* pWindow = new Window();
 	bool running = true;
 	while (running)
 	{
-		if (!pWindow->ProcessMessages())
+		if (!pApp->ProcessMessages())
 		{
 			running = false;
 		}
+		pApp->RenderFrame();
+		
 	}
-	delete pWindow;
+	delete pApp;
 	return 0;
 }

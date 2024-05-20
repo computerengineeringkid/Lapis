@@ -21,7 +21,7 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 Window::Window()
 	:m_hInstance(GetModuleHandle(nullptr))
 {
-	const wchar_t* CLASS_NAME = L"Renderer";
+	const char* CLASS_NAME = "Renderer";
 
 	WNDCLASS wndClass = {};
 	wndClass.lpszClassName = CLASS_NAME;
@@ -33,18 +33,18 @@ Window::Window()
 	RegisterClass(&wndClass);
 	DWORD style = WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU;
 
-	int width = 640, height = 480;
+	
 	RECT rect;
 	rect.left = 250;
 	rect.top = 250;
-	rect.right = rect.left + width;
-	rect.bottom = rect.top + height;
+	rect.right = rect.left + m_Width;
+	rect.bottom = rect.top + m_Height;
 
 	AdjustWindowRect(&rect, style, false);
-	m_hWnd = CreateWindowEx(
+	m_hWnd = CreateWindowExA(
 		0,
 		CLASS_NAME,
-		L"Window",
+		CLASS_NAME,
 		style,
 		rect.left,
 		rect.top,
@@ -62,7 +62,7 @@ Window::Window()
 
 Window::~Window()
 {
-	const wchar_t* CLASS_NAME = L"Renderer";
+	const char* CLASS_NAME = "Renderer";
 	UnregisterClass(CLASS_NAME, m_hInstance);;
 }
 
