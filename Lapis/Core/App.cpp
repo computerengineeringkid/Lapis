@@ -362,7 +362,6 @@ void App::DrawTestTriangle()
 
     
 
-    m_DeviceContext->Draw((UINT)std::size(vertices), 0u);
     m_DeviceContext->DrawIndexed((UINT)std::size(indices), 0, 0);
 }
 
