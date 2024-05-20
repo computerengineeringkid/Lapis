@@ -27,6 +27,7 @@ public:
 	void EndFrame();
 	void ClearBuffers();
 	void DrawTestTriangle();
+	void CreateDepthBuffer();
 protected:
 	
 	bool InitDirect3D();
@@ -49,6 +50,7 @@ protected:
 	wrl::ComPtr<ID3D11Texture2D> m_DepthStencilBuffer;
 	wrl::ComPtr<ID3D11RenderTargetView> m_RenderTargetView;
 	wrl::ComPtr<ID3D11DepthStencilView> m_DepthStencilView;
+	wrl::ComPtr<ID3D11DepthStencilState> m_DepthStencilState;
 	D3D11_VIEWPORT m_ScreenViewport;
 
 	D3D_DRIVER_TYPE m_D3dDriverType;

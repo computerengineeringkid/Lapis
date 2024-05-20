@@ -4,18 +4,9 @@
 
 int main()
 {
-	App* pApp = new App();
+	std::unique_ptr<App> pApp = std::make_unique<App>();
+	pApp->Run();
 	
-	bool running = true;
-	while (running)
-	{
-		if (!pApp->ProcessMessages())
-		{
-			running = false;
-		}
-		pApp->RenderFrame();
-		
-	}
-	delete pApp;
+	
 	return 0;
 }
