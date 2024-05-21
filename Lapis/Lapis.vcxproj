@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClInclude Include="Core\Camera.h" />
     <ClInclude Include="Core\App.h" />
+    <ClInclude Include="Core\KeyCodes.h" />
     <ClInclude Include="Core\Window.h" />
     <ClInclude Include="Core\Timer.h" />
   </ItemGroup>

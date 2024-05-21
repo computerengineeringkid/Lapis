@@ -27,15 +27,18 @@ public:
 	void RenderFrame();
 	void EndFrame();
 	void ClearBuffers();
-	void DrawTestTriangle();
+	void DrawCube(const DirectX::XMFLOAT3& position);
 	void CreateDepthBuffer();
 protected:
-	void UpdateConstantBuffer(const DirectX::XMMATRIX& viewMatrix, const DirectX::XMMATRIX& projectionMatrix);
+	void UpdateConstantBuffer(const DirectX::XMMATRIX& worldMatrix, const DirectX::XMMATRIX& viewMatrix, const DirectX::XMMATRIX& projectionMatrix);
 
 	bool InitDirect3D();
 	void CalculateFrameStats();
 	void ProcessInput();
 	bool IsKeyDown(int key);
+	void InitBuffers();
+	void InitConstantBuffer();
+	void InitShadersAndInputLayout();
 
 protected:
 	std::unique_ptr<class Window> m_Window;
@@ -56,11 +59,29 @@ protected:
 	wrl::ComPtr<ID3D11DepthStencilView> m_DepthStencilView;
 	wrl::ComPtr<ID3D11DepthStencilState> m_DepthStencilState;
 	wrl::ComPtr<ID3D11Buffer> m_ConstantBuffer;
+	wrl::ComPtr<ID3D11Buffer> m_VertexBuffer;
+	wrl::ComPtr<ID3D11Buffer> m_IndexBuffer;
+	wrl::ComPtr<ID3D11InputLayout> m_InputLayout;
+	
+	wrl::ComPtr<ID3D11VertexShader> m_VertexShader;
+	wrl::ComPtr<ID3D11PixelShader> m_PixelShader;
+
 	D3D11_VIEWPORT m_ScreenViewport;
 	class Camera* m_Camera;
 	D3D_DRIVER_TYPE m_D3dDriverType;
 	int m_ClientWidth, m_ClientHeight;
 	bool m_Enable4xMsaa;
+
+	struct ConstantBuffer {
+		DirectX::XMMATRIX view;
+		DirectX::XMMATRIX projection;
+		DirectX::XMMATRIX world;
+	};
+
+	struct Vertex {
+		DirectX::XMFLOAT3 pos;
+		DirectX::XMFLOAT4 color;
+	};
 	
 	
 };

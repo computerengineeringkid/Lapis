@@ -2,6 +2,7 @@ cbuffer MatrixBuffer
 {
     matrix view;
     matrix projection;
+    matrix world;
 };
 
 struct VS_INPUT
@@ -19,9 +20,9 @@ struct PS_INPUT
 PS_INPUT main(VS_INPUT input)
 {
     PS_INPUT output;
-    float4 worldPosition = float4(input.pos, 1.0); // Assuming model space is world space
-    output.pos = mul(worldPosition, view); // Apply view matrix
-    output.pos = mul(output.pos, projection); // Apply projection matrix
+    float4 worldPosition = mul(float4(input.pos, 1.0f), world); // Apply world matrix
+    worldPosition = mul(worldPosition, view); // Apply view matrix
+    output.pos = mul(worldPosition, projection); // Apply projection matrix
     output.color = input.color;
     return output;
 }

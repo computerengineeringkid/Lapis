@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include "Camera.h"
+#include "KeyCodes.h"
 
 App::App()
 {
@@ -32,6 +33,10 @@ bool App::Init()
     m_ClientHeight = m_Window->GetWindowHeight();
     m_Camera = new Camera(AspectRatio());
     InitDirect3D();
+    CreateDepthBuffer();
+    InitShadersAndInputLayout();
+    InitBuffers();
+    InitConstantBuffer();
     return true;
     
 }
@@ -102,7 +107,7 @@ bool App::InitDirect3D()
         return false;
     }
     pBackBuffer->Release();
-    CreateDepthBuffer();
+    
     m_DeviceContext->OMSetRenderTargets(1, m_RenderTargetView.GetAddressOf(),m_DepthStencilView.Get());
 
     ZeroMemory(&m_ScreenViewport, sizeof(D3D11_VIEWPORT));
@@ -152,12 +157,10 @@ void App::CreateDepthBuffer()
     m_DeviceContext->OMGetDepthStencilState(m_DepthStencilState.GetAddressOf(), 0);
 }
 
-void App::UpdateConstantBuffer(const DirectX::XMMATRIX& viewMatrix, const DirectX::XMMATRIX& projectionMatrix)
+void App::UpdateConstantBuffer(const DirectX::XMMATRIX& worldMatrix, const DirectX::XMMATRIX& viewMatrix, const DirectX::XMMATRIX& projectionMatrix)
 {
-    struct ConstantBuffer {
-        DirectX::XMMATRIX view;
-        DirectX::XMMATRIX projection;
-    }cb;
+    ConstantBuffer cb;
+    cb.world = DirectX::XMMatrixTranspose(worldMatrix);
     cb.view = DirectX::XMMatrixTranspose(viewMatrix);
     cb.projection = DirectX::XMMatrixTranspose(projectionMatrix);
     if (m_ConstantBuffer)
@@ -182,26 +185,26 @@ void App::ProcessInput()
     DirectX::XMVECTOR left = DirectX::XMVectorSet(speed, 0.0f,0.0f, 0.0f);
     DirectX::XMVECTOR up = DirectX::XMVectorSet(0.0f, -speed,0.0f, 0.0f);
     DirectX::XMVECTOR down = DirectX::XMVectorSet(0.0f,speed,0.0f, 0.0f);
-    if (IsKeyDown(0x51))
+    if (IsKeyDown(LAPIS_KEY_Q))
     {
         m_Camera->Move(forward);
     }
-    if (IsKeyDown(0x45))
+    if (IsKeyDown(LAPIS_KEY_E))
     {
         m_Camera->Move(backward);
     }
-    if (IsKeyDown(VK_RIGHT))
+    if (IsKeyDown(LAPIS_KEY_D))
     {
         m_Camera->Move(right);
     }
-    if (IsKeyDown(VK_LEFT))
+    if (IsKeyDown(LAPIS_KEY_A))
     {
         m_Camera->Move(left);
     }
-    if (IsKeyDown(VK_UP))
+    if (IsKeyDown(LAPIS_KEY_W))
     {
         m_Camera->Move(up);
-    } if (IsKeyDown(VK_DOWN))
+    } if (IsKeyDown(LAPIS_KEY_S))
     {
         m_Camera->Move(down);
     }
@@ -212,42 +215,10 @@ bool App::IsKeyDown(int key)
     return m_Window->IsKeyDown(key);
 }
 
-void App::RenderFrame()
-{
-    
-    ClearBuffers();
-    // Example matrices, replace with actual camera matrices
-    DirectX::XMMATRIX viewMatrix = m_Camera->GetViewMatrix();
-    DirectX::XMMATRIX projectionMatrix = m_Camera->GetProjectionMatrix();
-
-    UpdateConstantBuffer(viewMatrix, projectionMatrix);
-    DrawTestTriangle();
-    EndFrame();
-    
-}
-
-void App::EndFrame()
-{
-    m_SwapChain->Present(0, 0);
-}
-
-void App::ClearBuffers()
-{
-    const float color[4] = { 0.0f, 0.2f, 0.4f, 1.0f };
-    m_DeviceContext->ClearRenderTargetView(m_RenderTargetView.Get(), color);
-    m_DeviceContext->ClearDepthStencilView(m_DepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1, 0);
-}
-
-void App::DrawTestTriangle()
+void App::InitBuffers()
 {
     HRESULT hr;
-    namespace wrl = Microsoft::WRL;
-    wrl::ComPtr<ID3D11Buffer> pVertexBuffer;
-    wrl::ComPtr<ID3D11Buffer> pIndexBuffer;
-    struct Vertex {
-        DirectX::XMFLOAT3 pos; 
-        DirectX::XMFLOAT4 color;
-    };
+    
     const Vertex vertices[] =
     {
         {{-0.5f, -0.5f, -0.5f}, {1.0f, 1.0f, 0.0f, 1.0f}}, // Vertex 0
@@ -283,16 +254,27 @@ void App::DrawTestTriangle()
     ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
     ibd.CPUAccessFlags = 0u;
     ibd.MiscFlags = 0u;
-    
+
     D3D11_SUBRESOURCE_DATA isd = {};
     isd.pSysMem = indices;
     isd.SysMemPitch = 0;
     isd.SysMemSlicePitch = 0;
+    
+    hr = m_Device->CreateBuffer(&ibd, &isd, m_IndexBuffer.GetAddressOf());
+    if (FAILED(hr))
+        std::cerr << "Failed to create index buffer. HRESULT: " << hr << std::endl;
+    m_DeviceContext->IASetIndexBuffer(m_IndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
-    struct ConstantBuffer {
-        DirectX::XMMATRIX view;
-        DirectX::XMMATRIX projection;
-    };
+    m_Device->CreateBuffer(&bd, &sd, &m_VertexBuffer);
+    const UINT stride = sizeof(Vertex);
+    const UINT offset = 0u;
+    m_DeviceContext->IASetVertexBuffers(0u, 1u, m_VertexBuffer.GetAddressOf(), &stride, &offset);
+    
+}
+
+void App::InitConstantBuffer()
+{
+    HRESULT hr;
     D3D11_BUFFER_DESC cbd = {};
     cbd.Usage = D3D11_USAGE_DEFAULT;
     cbd.ByteWidth = sizeof(ConstantBuffer);
@@ -301,68 +283,112 @@ void App::DrawTestTriangle()
     cbd.MiscFlags = 0;
     cbd.StructureByteStride = 0;
 
-    hr = m_Device->CreateBuffer(&bd, nullptr, &m_ConstantBuffer);
+    hr = m_Device->CreateBuffer(&cbd, nullptr, &m_ConstantBuffer);
     if (FAILED(hr)) {
         std::cerr << "Failed to create constant buffer. HRESULT: " << hr << std::endl;
     }
+}
 
-    hr = m_Device->CreateBuffer(&ibd, &isd, pIndexBuffer.GetAddressOf());
-    if (FAILED(hr))
-        std::cerr << "Failed to create index buffer. HRESULT: " << hr << std::endl;
-    m_DeviceContext->IASetIndexBuffer(pIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
-
-    m_Device->CreateBuffer(&bd, &sd, &pVertexBuffer);
-    const UINT stride = sizeof(Vertex);
-    const UINT offset = 0u;
-    m_DeviceContext->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset);
-    wrl::ComPtr<ID3D11VertexShader> pVertexShader;
+void App::InitShadersAndInputLayout()
+{
+    HRESULT hr;
+    namespace wrl = Microsoft::WRL;
     wrl::ComPtr<ID3DBlob> pBlob;
 
-    wrl::ComPtr<ID3D11PixelShader> pPixelShader;
+    
     hr = D3DReadFileToBlob(L"PixelShader.cso", &pBlob);
     if (FAILED(hr)) {
         std::cerr << "Failed to load pixel shader. HRESULT: " << hr << std::endl;
         return;
     }
-    hr = m_Device->CreatePixelShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pPixelShader);
+    hr = m_Device->CreatePixelShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &m_PixelShader);
     if (FAILED(hr)) {
         std::cerr << "Failed to create vertex shader. HRESULT: " << hr << std::endl;
         return;
     }
 
-    m_DeviceContext->PSSetShader(pPixelShader.Get(), nullptr, 0u);
+    m_DeviceContext->PSSetShader(m_PixelShader.Get(), nullptr, 0u);
 
     hr = D3DReadFileToBlob(L"VertexShader.cso", &pBlob);
     if (FAILED(hr)) {
         std::cerr << "Failed to load pixel shader. HRESULT: " << hr << std::endl;
         return;
     }
-    hr = m_Device->CreateVertexShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pVertexShader);
+    hr = m_Device->CreateVertexShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &m_VertexShader);
     if (FAILED(hr)) {
         std::cerr << "Failed to create pixel shader. HRESULT: " << hr << std::endl;
         return;
     }
-    m_DeviceContext->VSSetShader(pVertexShader.Get(), nullptr, 0);
+    m_DeviceContext->VSSetShader(m_VertexShader.Get(), nullptr, 0);
 
-    wrl::ComPtr<ID3D11InputLayout> pInputLayout;
     const D3D11_INPUT_ELEMENT_DESC ied[] =
     {
         {"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-        {"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}  
+        {"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}
     };
 
     m_Device->CreateInputLayout(
         ied, (UINT)std::size(ied),
         pBlob->GetBufferPointer(),
         pBlob->GetBufferSize(),
-        &pInputLayout
+        &m_InputLayout
     );
-    m_DeviceContext->IASetInputLayout(pInputLayout.Get());
+    m_DeviceContext->IASetInputLayout(m_InputLayout.Get());
+    m_DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+}
+
+void App::RenderFrame()
+{
+    
+    ClearBuffers();
+    // Example matrices, replace with actual camera matrices
+    DirectX::XMMATRIX viewMatrix = m_Camera->GetViewMatrix();
+    DirectX::XMMATRIX projectionMatrix = m_Camera->GetProjectionMatrix();
+    DirectX::XMMATRIX worldMatrix = DirectX::XMMatrixTranslation(-2.0f, 0.0f, 0.0f);
+
+    UpdateConstantBuffer(worldMatrix,viewMatrix, projectionMatrix);
+    DirectX::XMFLOAT3 pos1(-2.0f, 0.0f, 0.0f);
+    DrawCube(pos1);
+    DirectX::XMFLOAT3 pos2(2.0f, 0.0f, 0.0f);
+    DrawCube(pos2);
+    DirectX::XMFLOAT3 pos3(0.0f, 0.0f, 0.0f);
+    DrawCube(pos3);
+    EndFrame();
+    
+}
+
+void App::EndFrame()
+{
+    m_SwapChain->Present(0, 0);
+}
+
+void App::ClearBuffers()
+{
+    const float color[4] = { 0.0f, 0.2f, 0.4f, 1.0f };
+    m_DeviceContext->ClearRenderTargetView(m_RenderTargetView.Get(), color);
+    m_DeviceContext->ClearDepthStencilView(m_DepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1, 0);
+}
+
+void App::DrawCube(const DirectX::XMFLOAT3& position)
+{
+    // Calculate the world matrix for the current cube position
+    DirectX::XMMATRIX worldMatrix = DirectX::XMMatrixTranslation(position.x, position.y, position.z);
+
+    // Update the constant buffer with the current world, view, and projection matrices
+    UpdateConstantBuffer(worldMatrix, m_Camera->GetViewMatrix(), m_Camera->GetProjectionMatrix());
+
+    // Set the vertex and index buffers before drawing
+    UINT stride = sizeof(Vertex);
+    UINT offset = 0;
+    m_DeviceContext->IASetVertexBuffers(0, 1, m_VertexBuffer.GetAddressOf(), &stride, &offset);
+    m_DeviceContext->IASetIndexBuffer(m_IndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+
+    // Set the input layout and primitive topology
+    m_DeviceContext->IASetInputLayout(m_InputLayout.Get());
     m_DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-    
-
-    m_DeviceContext->DrawIndexed((UINT)std::size(indices), 0, 0);
+    // Draw the cube
+    m_DeviceContext->DrawIndexed(36, 0, 0);
 }
 
 
