@@ -79,10 +79,20 @@ bool Window::ProcessMessages()
 	}
 	return true;
 }
-
+POINT Window::GetMousePosition() const {
+	POINT p;
+	GetCursorPos(&p);
+	ScreenToClient(m_hWnd, &p);  // Convert the screen coordinates to client coordinates
+	return p;
+}
 bool Window::IsKeyDown(int vKey)
 {
 	return(GetAsyncKeyState(vKey) & 0x8000) != 0;
+}
+
+bool Window::IsMouseButtonDown(int button)
+{
+	return (GetAsyncKeyState(button) & 0x8000) != 0;
 }
 
 

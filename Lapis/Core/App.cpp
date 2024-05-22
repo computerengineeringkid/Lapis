@@ -3,6 +3,7 @@
 #include <string>
 #include "Graphics/Objects/Camera.h"
 #include "Utils/KeyCodes.h"
+#include "Utils/MouseCodes.h"
 
 
 App::App()
@@ -36,14 +37,15 @@ bool App::Init()
     m_ClientHeight = m_Window->GetWindowHeight();
     GraphicsManager::Get().SetGraphicsManager(m_ClientWidth, m_ClientHeight, m_Window->GetWindow());
     GraphicsManager::Get().InitializeDirect3D();
-    InitConstantBuffer();
+    GraphicsManager::Get().CreateConstantBuffer();
     m_Camera = new Camera(AspectRatio());
     // Create cubes
     for (int i = 0; i < 2; ++i) {
         auto cube = std::make_unique<Cube>(GraphicsManager::Get().GetDevice(), 1);
         m_Cubes.push_back(std::move(cube));
     }
-
+    DirectX::XMFLOAT3 pos1(-2.0f, 0.0f, 0.0f);
+    m_Cubes[1]->SetPosition(pos1);
     m_Timer.Start();
     return true;
     
@@ -67,8 +69,7 @@ void App::RenderFrame()
         DirectX::XMFLOAT3 rotation = m_Cubes[0]->GetRotation();
         rotation.y += deltaTime * rotationSpeed;  // Increment Y rotation based on elapsed time
         m_Cubes[0]->SetRotation(rotation);
-        DirectX::XMFLOAT3 pos1(-2.0f, 0.0f, 0.0f);
-        m_Cubes[1]->SetPosition(pos1);
+        
         
         data.world = DirectX::XMMatrixTranspose(cube->CalculateWorldMatrix());  // Ensure CalculateWorldMatrix exists and returns the correct matrix
         
@@ -80,7 +81,7 @@ void App::RenderFrame()
         // Render the cube
         cube->Render(GraphicsManager::Get().GetDeviceContext());
     }
-    UpdateConstantBuffer(viewMatrix, projectionMatrix);
+    GraphicsManager::Get().UpdateConstantBuffer(viewMatrix, projectionMatrix);
     
     
     /*DirectX::XMFLOAT3 pos1(-2.0f, 0.0f, 0.0f);
@@ -117,25 +118,6 @@ bool App::ProcessMessages()
     return m_Window->ProcessMessages();
 }
 
-
-
-
-void App::UpdateConstantBuffer( const DirectX::XMMATRIX& viewMatrix, const DirectX::XMMATRIX& projectionMatrix)
-{
-    ConstantBuffer cb;
-    
-    cb.view = DirectX::XMMatrixTranspose(viewMatrix);
-    cb.projection = DirectX::XMMatrixTranspose(projectionMatrix);
-    if (m_ConstantBuffer)
-    {
-        /*m_DeviceContext->UpdateSubresource(m_ConstantBuffer.Get(), 0, nullptr, &cb, 0, 0);
-        m_DeviceContext->VSSetConstantBuffers(0, 1, m_ConstantBuffer.GetAddressOf());*/
-        
-        GraphicsManager::Get().GetDeviceContext()->UpdateSubresource(m_ConstantBuffer.Get(), 0, nullptr, &cb, 0, 0);
-        GraphicsManager::Get().GetDeviceContext()->VSSetConstantBuffers(0, 1, m_ConstantBuffer.GetAddressOf());
-
-    }
-}
 
 void App::CalculateFrameStats()
 {
@@ -174,6 +156,26 @@ void App::ProcessInput()
     {
         m_Camera->Move(down);
     }
+    // Mouse rotation
+    static int lastX = 0, lastY = 0;
+    if (m_Window->IsMouseButtonDown(LAPIS_MOUSE_BUTTON_RIGHT)) {
+        POINT mousePos = m_Window->GetMousePosition();
+
+        // Assume lastX and lastY are class members that track the last mouse position
+        int deltaX = mousePos.x - lastX;
+        int deltaY = mousePos.y - lastY;
+
+        // Reset the last position to the current position
+        lastX = mousePos.x;
+        lastY = mousePos.y;
+        // Normalize the deltas
+        float normalizedDeltaX = static_cast<float>(deltaX) / m_Window->GetWindowWidth();
+        float normalizedDeltaY = static_cast<float>(deltaY) / m_Window->GetWindowHeight();
+
+        if (deltaX != 0 || deltaY != 0) {
+            m_Camera->Rotate(static_cast<float>(normalizedDeltaY) * rotationSpeed, static_cast<float>(normalizedDeltaX) * rotationSpeed);
+        }
+    }
 }
 
 bool App::IsKeyDown(int key)
@@ -181,23 +183,11 @@ bool App::IsKeyDown(int key)
     return m_Window->IsKeyDown(key);
 }
 
-void App::InitConstantBuffer()
+bool App::IsMouseButtonDown(int button)
 {
-    HRESULT hr;
-    D3D11_BUFFER_DESC cbd = {};
-    cbd.Usage = D3D11_USAGE_DEFAULT;
-    cbd.ByteWidth = sizeof(ConstantBuffer);
-    cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-    cbd.CPUAccessFlags = 0;
-    cbd.MiscFlags = 0;
-    cbd.StructureByteStride = 0;
-
-   // hr = m_Device->CreateBuffer(&cbd, nullptr, &m_ConstantBuffer);
-    hr = GraphicsManager::Get().GetDevice()->CreateBuffer(&cbd, nullptr, &m_ConstantBuffer);
-    if (FAILED(hr)) {
-        std::cerr << "Failed to create constant buffer. HRESULT: " << hr << std::endl;
-    }
+    return m_Window->IsMouseButtonDown(button);
 }
+
 
 
 

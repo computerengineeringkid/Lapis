@@ -13,5 +13,5 @@ float4 main(PS_INPUT input) : SV_TARGET
 {
     float4 textureColor = shaderTexture.Sample(sampleType, input.tex);
     //return textureColor; // Only texture color
-    return input.color * textureColor; // Blend vertex color with texture color
+    return input.color;// * textureColor; // Blend vertex color with texture color
 }

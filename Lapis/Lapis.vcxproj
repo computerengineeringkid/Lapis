@@ -154,6 +154,7 @@
     <ClInclude Include="Core\App.h" />
     <ClInclude Include="Graphics\Shaders\Shader.h" />
     <ClInclude Include="Graphics\Shaders\PixelShader.h" />
+    <ClInclude Include="Utils\MouseCodes.h" />
     <ClInclude Include="Utils\KeyCodes.h" />
     <ClInclude Include="Core\Window.h" />
     <ClInclude Include="Utils\Timer.h" />

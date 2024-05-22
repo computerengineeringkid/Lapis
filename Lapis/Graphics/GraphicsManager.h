@@ -20,6 +20,8 @@ public:
     void RenderEnd();
     void ClearBuffer(float red, float green, float blue);
     void CreateDepthBuffer();
+    void CreateConstantBuffer();
+    void UpdateConstantBuffer(const DirectX::XMMATRIX& viewMatrix, const DirectX::XMMATRIX& projectionMatrix);
     
 
     ID3D11Device* GetDevice() const;
@@ -38,8 +40,16 @@ private:
     wrl::ComPtr<ID3D11DepthStencilView> m_DepthStencilView;
     wrl::ComPtr<ID3D11DepthStencilState> m_DepthStencilState;
     wrl::ComPtr<ID3D11Texture2D> m_DepthStencilBuffer;
+    wrl::ComPtr<ID3D11Buffer> m_ConstantBuffer;
+
 
     D3D11_VIEWPORT m_ScreenViewport;
+
+    struct ConstantBuffer {
+        DirectX::XMMATRIX view;
+        DirectX::XMMATRIX projection;
+
+    };
 
     int m_ClientWidth;
     int m_ClientHeight;

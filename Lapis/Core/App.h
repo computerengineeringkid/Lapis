@@ -20,7 +20,7 @@ class App
 public:
 	
 	static App& Get() {
-		static App instance;  // Guaranteed to be destroyed and instantiated on first use.
+		static App instance; 
 		return instance;
 	}
 
@@ -36,14 +36,13 @@ public:
 	
 	
 protected:
-	void UpdateConstantBuffer(const DirectX::XMMATRIX& viewMatrix, const DirectX::XMMATRIX& projectionMatrix);
 
 	
 	void CalculateFrameStats();
 	void ProcessInput();
 	bool IsKeyDown(int key);
-	
-	void InitConstantBuffer();
+	bool IsMouseButtonDown(int button);
+
 	
 
 	
@@ -64,38 +63,12 @@ public:
 	HWND& GetWindow() const { return m_Window->GetWindow(); }
 
 protected:
-	wrl::ComPtr<ID3D11Device> m_Device;
-	wrl::ComPtr<ID3D11DeviceContext> m_DeviceContext;
-	wrl::ComPtr<IDXGISwapChain> m_SwapChain;
-	wrl::ComPtr<ID3D11Texture2D> m_DepthStencilBuffer;
-	wrl::ComPtr<ID3D11RenderTargetView> m_RenderTargetView;
-	wrl::ComPtr<ID3D11DepthStencilView> m_DepthStencilView;
-	wrl::ComPtr<ID3D11DepthStencilState> m_DepthStencilState;
-	wrl::ComPtr<ID3D11Buffer> m_ConstantBuffer;
-	wrl::ComPtr<ID3D11Buffer> m_VertexBuffer;
-	wrl::ComPtr<ID3D11Buffer> m_IndexBuffer;
-	wrl::ComPtr<ID3D11InputLayout> m_InputLayout;
 	
-	wrl::ComPtr<ID3D11VertexShader> m_VertexShader;
-	wrl::ComPtr<ID3D11PixelShader> m_PixelShader;
-
-	D3D11_VIEWPORT m_ScreenViewport;
 	class Camera* m_Camera;
-	D3D_DRIVER_TYPE m_D3dDriverType;
 	int m_ClientWidth, m_ClientHeight;
 	bool m_Enable4xMsaa;
 
-	struct ConstantBuffer {
-		DirectX::XMMATRIX view;
-		DirectX::XMMATRIX projection;
-		
-	};
-
-	struct Vertex {
-		DirectX::XMFLOAT3 pos;
-		DirectX::XMFLOAT4 color;
-		DirectX::XMFLOAT2 tex;
-	};
+	
 
 	std::vector<std::unique_ptr<Cube>> m_Cubes;
 

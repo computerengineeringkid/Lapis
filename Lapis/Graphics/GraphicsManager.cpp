@@ -120,10 +120,41 @@ void GraphicsManager::CreateDepthBuffer()
     m_DeviceContext->OMGetDepthStencilState(m_DepthStencilState.GetAddressOf(), 0);
 }
 
+void GraphicsManager::CreateConstantBuffer()
+{
+    HRESULT hr;
+    D3D11_BUFFER_DESC cbd = {};
+    cbd.Usage = D3D11_USAGE_DEFAULT;
+    cbd.ByteWidth = sizeof(ConstantBuffer);
+    cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    cbd.CPUAccessFlags = 0;
+    cbd.MiscFlags = 0;
+    cbd.StructureByteStride = 0;
+
+    // hr = m_Device->CreateBuffer(&cbd, nullptr, &m_ConstantBuffer);
+    hr = GraphicsManager::Get().GetDevice()->CreateBuffer(&cbd, nullptr, &m_ConstantBuffer);
+    if (FAILED(hr)) {
+        std::cerr << "Failed to create constant buffer. HRESULT: " << hr << std::endl;
+    }
+}
+
+void GraphicsManager::UpdateConstantBuffer(const DirectX::XMMATRIX& viewMatrix, const DirectX::XMMATRIX& projectionMatrix)
+{
+    ConstantBuffer cb;
+
+    cb.view = DirectX::XMMatrixTranspose(viewMatrix);
+    cb.projection = DirectX::XMMatrixTranspose(projectionMatrix);
+    if (m_ConstantBuffer)
+    {
+        m_DeviceContext->UpdateSubresource(m_ConstantBuffer.Get(), 0, nullptr, &cb, 0, 0);
+        m_DeviceContext->VSSetConstantBuffers(0, 1, m_ConstantBuffer.GetAddressOf());
+    }
+}
+
 
 
 void GraphicsManager::RenderBegin() {
-    ClearBuffer(0.0f, 0.2f, 0.4f);
+    ClearBuffer(0.0f, 0.7f, 0.4f);
 }
 
 void GraphicsManager::RenderEnd() {

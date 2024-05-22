@@ -22,6 +22,8 @@ public:
 	int GetWindowWidth() { return m_Width; }
 	int GetWindowHeight() { return m_Height; }
 	bool IsKeyDown(int vKey);
+	bool IsMouseButtonDown(int button);
+	POINT GetMousePosition() const;
 
 private:
 	HINSTANCE m_hInstance;

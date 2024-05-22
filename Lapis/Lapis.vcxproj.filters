@@ -80,6 +80,9 @@
     <ClInclude Include="Graphics\Shaders\PixelShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\MouseCodes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Graphics\Shaders\VertexShader.hlsl" />
