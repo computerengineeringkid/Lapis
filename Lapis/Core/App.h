@@ -1,20 +1,28 @@
 #pragma once
 #include <Windows.h>
-#include "Timer.h"
+#include "Window.h"
+#include "Utils/Timer.h"
 #include <d3d11.h>
 #include <dxgi.h>
 #include <D3Dcompiler.h>
 #include <wrl.h>
 #include <DirectXMath.h>
+#include "Graphics/GraphicsManager.h"
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "D3DCompiler.lib")
-
+#include <vector>
+#include "Graphics/Objects/Cube.h"
 namespace wrl = Microsoft::WRL;
+
 class App
 {
 public:
-	App();
+	
+	static App& Get() {
+		static App instance;  // Guaranteed to be destroyed and instantiated on first use.
+		return instance;
+	}
 
 	int Run();
 
@@ -25,30 +33,35 @@ public:
 	float AspectRatio() const;
 	bool ProcessMessages();
 	void RenderFrame();
-	void EndFrame();
-	void ClearBuffers();
-	void DrawCube(const DirectX::XMFLOAT3& position);
-	void CreateDepthBuffer();
+	
+	
 protected:
-	void UpdateConstantBuffer(const DirectX::XMMATRIX& worldMatrix, const DirectX::XMMATRIX& viewMatrix, const DirectX::XMMATRIX& projectionMatrix);
+	void UpdateConstantBuffer(const DirectX::XMMATRIX& viewMatrix, const DirectX::XMMATRIX& projectionMatrix);
 
-	bool InitDirect3D();
+	
 	void CalculateFrameStats();
 	void ProcessInput();
 	bool IsKeyDown(int key);
-	void InitBuffers();
+	
 	void InitConstantBuffer();
-	void InitShadersAndInputLayout();
+	
 
+	
+private:
+	App();
+	App(const App&) = delete;
+	App& operator=(const App&) = delete;
 protected:
-	std::unique_ptr<class Window> m_Window;
+	std::unique_ptr<Window> m_Window;
+	
 	bool m_AppPaused;
 	bool m_Minimized;
 	bool m_Maximized;
 	bool m_Resizing;
 	UINT m_4xMsaaQuality;
 	Timer m_Timer;
-
+public:
+	HWND& GetWindow() const { return m_Window->GetWindow(); }
 
 protected:
 	wrl::ComPtr<ID3D11Device> m_Device;
@@ -75,13 +88,17 @@ protected:
 	struct ConstantBuffer {
 		DirectX::XMMATRIX view;
 		DirectX::XMMATRIX projection;
-		DirectX::XMMATRIX world;
+		
 	};
 
 	struct Vertex {
 		DirectX::XMFLOAT3 pos;
 		DirectX::XMFLOAT4 color;
+		DirectX::XMFLOAT2 tex;
 	};
+
+	std::vector<std::unique_ptr<Cube>> m_Cubes;
+
 	
 	
 };

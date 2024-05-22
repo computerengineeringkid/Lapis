@@ -4,8 +4,8 @@
 
 int main()
 {
-	std::unique_ptr<App> pApp = std::make_unique<App>();
-	pApp->Run();
+	
+	App::Get().Run();
 	
 	
 	return 0;

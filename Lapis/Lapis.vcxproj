@@ -104,6 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -121,6 +122,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -133,26 +135,38 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Core\Camera.cpp" />
+    <ClCompile Include="Graphics\GraphicsManager.cpp" />
+    <ClCompile Include="Graphics\Objects\GameObject.cpp" />
+    <ClCompile Include="Graphics\Objects\Cube.cpp" />
+    <ClCompile Include="Graphics\Objects\Camera.cpp" />
     <ClCompile Include="Core\App.cpp" />
     <ClCompile Include="Core\Entry.cpp" />
     <ClCompile Include="Core\Window.cpp" />
+    <ClCompile Include="Graphics\Shaders\Shader.cpp" />
+    <ClCompile Include="Graphics\Shaders\PixelShader.cpp" />
+    <ClCompile Include="Graphics\Shaders\VertexShader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Core\Camera.h" />
+    <ClInclude Include="Graphics\GraphicsManager.h" />
+    <ClInclude Include="Graphics\Objects\GameObject.h" />
+    <ClInclude Include="Graphics\Objects\Cube.h" />
+    <ClInclude Include="Graphics\Objects\Camera.h" />
     <ClInclude Include="Core\App.h" />
-    <ClInclude Include="Core\KeyCodes.h" />
+    <ClInclude Include="Graphics\Shaders\Shader.h" />
+    <ClInclude Include="Graphics\Shaders\PixelShader.h" />
+    <ClInclude Include="Utils\KeyCodes.h" />
     <ClInclude Include="Core\Window.h" />
-    <ClInclude Include="Core\Timer.h" />
+    <ClInclude Include="Utils\Timer.h" />
+    <ClInclude Include="Graphics\Shaders\VertexShader.h" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Core\PixelShader.hlsl">
+    <FxCompile Include="Graphics\Shaders\PixelShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
-    <FxCompile Include="Core\VertexShader.hlsl">
+    <FxCompile Include="Graphics\Shaders\VertexShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
