@@ -25,21 +25,41 @@ void Camera::UpdateViewMatrix() {
     viewMatrix = XMMatrixLookAtLH(position, lookAt, up);
 }
 
-void Camera::Rotate(float pitch, float yaw)
+void Camera::Rotate(float dpitch, float dyaw)
 {
-    using  namespace DirectX;
-    XMMATRIX rotationMatrix = XMMatrixRotationRollPitchYaw(pitch, yaw, 0);
-    XMVECTOR lookDirection = XMVectorSubtract(lookAt, position);
-    lookDirection = XMVector3TransformCoord(lookDirection, rotationMatrix);
+    using namespace DirectX;
+
+    // Update cumulative angles
+    pitch += dpitch;
+    yaw += dyaw;
+
+    XMMATRIX rotationMatrix = XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0f);
+    XMVECTOR defaultForward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
+    XMVECTOR lookDirection = XMVector3TransformCoord(defaultForward, rotationMatrix);
     lookAt = XMVectorAdd(position, lookDirection);
-    XMVECTOR right = XMVector3Cross(up, lookDirection);
+    XMVECTOR right = XMVector3Cross(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), lookDirection);
     up = XMVector3Cross(lookDirection, right);
+
+    // Update view matrix
     UpdateViewMatrix();
 }
 
-void Camera::Move(DirectX::XMVECTOR deltaPos)
+
+void Camera::Move(DirectX::XMVECTOR direction)
 {
-    position = DirectX::XMVectorAdd(position, deltaPos);
-    lookAt = DirectX::XMVectorAdd(lookAt, deltaPos);
+    using namespace DirectX;
+
+    // Calculate the current rotation matrix
+    XMMATRIX rotationMatrix = XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0f);
+
+    // Transform the direction vector by the rotation matrix
+    XMVECTOR directionInWorld = XMVector3TransformCoord(direction, rotationMatrix);
+
+    // Update the position and the lookAt point
+    position = XMVectorAdd(position, directionInWorld);
+    lookAt = XMVectorAdd(lookAt, directionInWorld);
+
+    // Update the view matrix
+    UpdateViewMatrix();
     UpdateViewMatrix();
 }

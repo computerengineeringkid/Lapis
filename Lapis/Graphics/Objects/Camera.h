@@ -8,8 +8,8 @@ public:
     void SetProjectionMatrix(float aspectRatio);
 
     void UpdateViewMatrix();
-    void Rotate(float pitch, float yaw);
-    void Move(DirectX::XMVECTOR deltaPos);
+    void Rotate(float dpitch, float dyaw);
+    void Move(DirectX::XMVECTOR direction);
     DirectX::XMMATRIX GetViewMatrix() const {
         return viewMatrix;
     }
@@ -24,4 +24,7 @@ private:
     DirectX::XMVECTOR position;
     DirectX::XMVECTOR lookAt;
     DirectX::XMVECTOR up;
+
+    float pitch = 0.0f; // Cumulative pitch angle
+    float yaw = 0.0f;   // Cumulative yaw angle
 };

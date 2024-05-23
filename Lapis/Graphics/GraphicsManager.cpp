@@ -55,10 +55,10 @@ bool GraphicsManager::InitializeDirect3D() {
         return false;
     }
     pBackBuffer->Release();
-
-    m_DeviceContext->OMSetRenderTargets(1, m_RenderTargetView.GetAddressOf(), m_DepthStencilView.Get());
     CreateDepthBuffer();
+    m_DeviceContext->OMSetRenderTargets(1, m_RenderTargetView.GetAddressOf(), m_DepthStencilView.Get());
     SetViewport((m_ClientWidth),(m_ClientHeight));
+    
     return true;
 }
 
@@ -82,42 +82,46 @@ void GraphicsManager::ClearBuffer(float red, float green, float blue) {
     float color[4] = { red, green, blue, 1.0f };
     m_DeviceContext->ClearRenderTargetView(m_RenderTargetView.Get(), color);
     m_DeviceContext->ClearDepthStencilView(m_DepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+    
 }
 
 void GraphicsManager::CreateDepthBuffer()
 {
-    D3D11_TEXTURE2D_DESC texDesc = {};
-    texDesc.Width = m_ClientWidth;
-    texDesc.Height = m_ClientHeight;
-    texDesc.MipLevels = 1;
-    texDesc.ArraySize = 1;
-    texDesc.Format = DXGI_FORMAT_D32_FLOAT;
-    texDesc.SampleDesc.Count = 1;
-    texDesc.SampleDesc.Quality = 0;
-    texDesc.Usage = D3D11_USAGE_DEFAULT;
-    texDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-
-
-    m_DepthStencilBuffer = nullptr;
-    if (FAILED(m_Device->CreateTexture2D(&texDesc, nullptr, &m_DepthStencilBuffer)))
-    {
-        std::cout << "DXGI: Failed to create texture for DepthStencilView\n";
-        return;
-    }
-    D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
-    dsvDesc.Format = DXGI_FORMAT_D32_FLOAT;
-    dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-    if (FAILED(m_Device->CreateDepthStencilView(m_DepthStencilBuffer.Get(), &dsvDesc, &m_DepthStencilView)))
-    {
-        std::cout << "DXGI: Failed to create DepthStencilView\n";
-        return;
-    }
     D3D11_DEPTH_STENCIL_DESC depthDesc = {};
     depthDesc.DepthEnable = TRUE;
     depthDesc.DepthFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_LESS;
     depthDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-    m_Device->CreateDepthStencilState(&depthDesc, m_DepthStencilState.GetAddressOf());
-    m_DeviceContext->OMGetDepthStencilState(m_DepthStencilState.GetAddressOf(), 0);
+    m_Device->CreateDepthStencilState(&depthDesc, &m_DepthStencilState);
+    m_DeviceContext->OMSetDepthStencilState(m_DepthStencilState.Get(), 1u);
+    
+    D3D11_TEXTURE2D_DESC descDepth = {};
+    descDepth.Width = m_ClientWidth;
+    descDepth.Height = m_ClientHeight;
+    descDepth.MipLevels = 1u;
+    descDepth.ArraySize = 1u;
+    descDepth.Format = DXGI_FORMAT_D32_FLOAT;
+    descDepth.SampleDesc.Count = 1u;
+    descDepth.SampleDesc.Quality = 0u;
+    descDepth.Usage = D3D11_USAGE_DEFAULT;
+    descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+
+
+    m_DepthStencilBuffer = nullptr;
+    if (FAILED(m_Device->CreateTexture2D(&descDepth, nullptr, &m_DepthStencilBuffer)))
+    {
+        std::cout << "DXGI: Failed to create texture for DepthStencilView\n";
+        return;
+    }
+    D3D11_DEPTH_STENCIL_VIEW_DESC descDSV = {};
+    descDSV.Format = DXGI_FORMAT_D32_FLOAT;
+    descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+    descDSV.Texture2D.MipSlice = 0u;
+    if (FAILED(m_Device->CreateDepthStencilView(m_DepthStencilBuffer.Get(), &descDSV, &m_DepthStencilView)))
+    {
+        std::cout << "DXGI: Failed to create DepthStencilView\n";
+        return;
+    }
+    
 }
 
 void GraphicsManager::CreateConstantBuffer()
@@ -154,11 +158,12 @@ void GraphicsManager::UpdateConstantBuffer(const DirectX::XMMATRIX& viewMatrix, 
 
 
 void GraphicsManager::RenderBegin() {
-    ClearBuffer(0.0f, 0.7f, 0.4f);
+    ClearBuffer(0.0f, 0.0f, 0.0f);
+    
 }
 
 void GraphicsManager::RenderEnd() {
-    m_SwapChain->Present(0, 0);
+    m_SwapChain->Present(1u, 0u);
 }
 
 ID3D11Device* GraphicsManager::GetDevice() const {

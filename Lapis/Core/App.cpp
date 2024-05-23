@@ -38,6 +38,7 @@ bool App::Init()
     GraphicsManager::Get().SetGraphicsManager(m_ClientWidth, m_ClientHeight, m_Window->GetWindow());
     GraphicsManager::Get().InitializeDirect3D();
     GraphicsManager::Get().CreateConstantBuffer();
+    
     m_Camera = new Camera(AspectRatio());
     // Create cubes
     for (int i = 0; i < 2; ++i) {
@@ -84,15 +85,10 @@ void App::RenderFrame()
     GraphicsManager::Get().UpdateConstantBuffer(viewMatrix, projectionMatrix);
     
     
-    /*DirectX::XMFLOAT3 pos1(-2.0f, 0.0f, 0.0f);
-    DrawCube(pos1);
-    DirectX::XMFLOAT3 pos2(2.0f, 0.0f, 0.0f);
-    DrawCube(pos2);
-    DirectX::XMFLOAT3 pos3(0.0f, 0.0f, 0.0f);
-    DrawCube(pos3);*/
+    
 
     GraphicsManager::Get().RenderEnd();
-    //EndFrame();
+    
 
 }
 void App::OnResize()
@@ -125,55 +121,94 @@ void App::CalculateFrameStats()
 
 void App::ProcessInput()
 {
-    const float speed = 0.01f;
-    const float rotationSpeed = 0.01f;
-    DirectX::XMVECTOR forward = DirectX::XMVectorSet(0.0f, 0.0f, speed, 0.0f);
-    DirectX::XMVECTOR backward = DirectX::XMVectorSet(0.0f, 0.0f, -speed, 0.0f);
-    DirectX::XMVECTOR right = DirectX::XMVectorSet(-speed, 0.0f,0.0f, 0.0f);
-    DirectX::XMVECTOR left = DirectX::XMVectorSet(speed, 0.0f,0.0f, 0.0f);
-    DirectX::XMVECTOR up = DirectX::XMVectorSet(0.0f, -speed,0.0f, 0.0f);
-    DirectX::XMVECTOR down = DirectX::XMVectorSet(0.0f,speed,0.0f, 0.0f);
+    const float speed = 0.1f;
+    const float rotationSpeed = 3.0f;
+    DirectX::XMVECTOR forward = DirectX::XMVectorSet(0.0f, 0.0f, -speed, 0.0f);
+    DirectX::XMVECTOR backward = DirectX::XMVectorSet(0.0f, 0.0f, speed, 0.0f);
+    DirectX::XMVECTOR right = DirectX::XMVectorSet(speed, 0.0f,0.0f, 0.0f);
+    DirectX::XMVECTOR left = DirectX::XMVectorSet(-speed, 0.0f,0.0f, 0.0f);
+    DirectX::XMVECTOR up = DirectX::XMVectorSet(0.0f, speed,0.0f, 0.0f);
+    DirectX::XMVECTOR down = DirectX::XMVectorSet(0.0f,-speed,0.0f, 0.0f);
     if (IsKeyDown(LAPIS_KEY_Q))
-    {
-        m_Camera->Move(forward);
-    }
-    if (IsKeyDown(LAPIS_KEY_E))
-    {
-        m_Camera->Move(backward);
-    }
-    if (IsKeyDown(LAPIS_KEY_D))
-    {
-        m_Camera->Move(right);
-    }
-    if (IsKeyDown(LAPIS_KEY_A))
-    {
-        m_Camera->Move(left);
-    }
-    if (IsKeyDown(LAPIS_KEY_W))
-    {
-        m_Camera->Move(up);
-    } if (IsKeyDown(LAPIS_KEY_S))
     {
         m_Camera->Move(down);
     }
-    // Mouse rotation
-    static int lastX = 0, lastY = 0;
-    if (m_Window->IsMouseButtonDown(LAPIS_MOUSE_BUTTON_RIGHT)) {
-        POINT mousePos = m_Window->GetMousePosition();
+    else if (IsKeyDown(LAPIS_KEY_E))
+    {
+        m_Camera->Move(up);
+    }
+    else if (IsKeyDown(LAPIS_KEY_D))
+    {
+        m_Camera->Move(right);
+    }
+    else if (IsKeyDown(LAPIS_KEY_A))
+    {
+        m_Camera->Move(left);
+    }
+    else if (IsKeyDown(LAPIS_KEY_W))
+    {
+        m_Camera->Move(backward);
+        
+    } 
+    else if (IsKeyDown(LAPIS_KEY_S))
+    {
+        
+        m_Camera->Move(forward);
+    }
+    //------ arrows ------
+    
+    else if (IsKeyDown(LAPIS_RIGHT_ARROW))
+    {
+        m_Camera->Move(right);
+    }
+    else if (IsKeyDown(LAPIS_LEFT_ARROW))
+    {
+        m_Camera->Move(left);
+    }
+    else if (IsKeyDown(LAPIS_UP_ARROW))
+    {
+        m_Camera->Move(up);
+    }
+    else if (IsKeyDown(LAPIS_DOWN_ARROW))
+    {
+        m_Camera->Move(down);
 
-        // Assume lastX and lastY are class members that track the last mouse position
+    }
+    static bool isRightButtonDown = false;
+    static int lastX = 0, lastY = 0;
+
+    POINT mousePos;
+    GetCursorPos(&mousePos);
+    ScreenToClient(m_Window->GetWindow(), &mousePos);
+
+    if (m_Window->IsMouseButtonDown(LAPIS_MOUSE_BUTTON_RIGHT)) {
+        if (!isRightButtonDown) {
+            // Right mouse button just pressed, initialize last position
+            lastX = mousePos.x;
+            lastY = mousePos.y;
+            isRightButtonDown = true;
+            SetCapture(m_Window->GetWindow());  // Capture the mouse
+        }
+
         int deltaX = mousePos.x - lastX;
         int deltaY = mousePos.y - lastY;
 
-        // Reset the last position to the current position
-        lastX = mousePos.x;
-        lastY = mousePos.y;
         // Normalize the deltas
         float normalizedDeltaX = static_cast<float>(deltaX) / m_Window->GetWindowWidth();
         float normalizedDeltaY = static_cast<float>(deltaY) / m_Window->GetWindowHeight();
 
         if (deltaX != 0 || deltaY != 0) {
             m_Camera->Rotate(static_cast<float>(normalizedDeltaY) * rotationSpeed, static_cast<float>(normalizedDeltaX) * rotationSpeed);
+        }
+
+        // Update last position
+        lastX = mousePos.x;
+        lastY = mousePos.y;
+    }
+    else {
+        if (isRightButtonDown) {
+            ReleaseCapture();  // Release mouse capture when the right button is released
+            isRightButtonDown = false;
         }
     }
 }
