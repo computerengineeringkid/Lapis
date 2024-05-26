@@ -148,6 +148,7 @@ void GraphicsManager::UpdateConstantBuffer(const DirectX::XMMATRIX& viewMatrix, 
 
     cb.view = DirectX::XMMatrixTranspose(viewMatrix);
     cb.projection = DirectX::XMMatrixTranspose(projectionMatrix);
+
     if (m_ConstantBuffer)
     {
         m_DeviceContext->UpdateSubresource(m_ConstantBuffer.Get(), 0, nullptr, &cb, 0, 0);
@@ -158,7 +159,7 @@ void GraphicsManager::UpdateConstantBuffer(const DirectX::XMMATRIX& viewMatrix, 
 
 
 void GraphicsManager::RenderBegin() {
-    ClearBuffer(0.0f, 0.0f, 0.0f);
+    ClearBuffer(0.0f, 1.0f, 0.0f);
     
 }
 

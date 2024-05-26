@@ -135,6 +135,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Graphics\GDIPlusManager.cpp" />
     <ClCompile Include="Graphics\GraphicsManager.cpp" />
     <ClCompile Include="Graphics\Objects\GameObject.cpp" />
     <ClCompile Include="Graphics\Objects\Cube.cpp" />
@@ -145,8 +146,12 @@
     <ClCompile Include="Graphics\Shaders\Shader.cpp" />
     <ClCompile Include="Graphics\Shaders\PixelShader.cpp" />
     <ClCompile Include="Graphics\Shaders\VertexShader.cpp" />
+    <ClCompile Include="Graphics\Texture.cpp" />
+    <ClCompile Include="Graphics\Surface.cpp" />
+    <ClCompile Include="Graphics\Sampler.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Graphics\GDIPlusManager.h" />
     <ClInclude Include="Graphics\GraphicsManager.h" />
     <ClInclude Include="Graphics\Objects\GameObject.h" />
     <ClInclude Include="Graphics\Objects\Cube.h" />
@@ -154,6 +159,9 @@
     <ClInclude Include="Core\App.h" />
     <ClInclude Include="Graphics\Shaders\Shader.h" />
     <ClInclude Include="Graphics\Shaders\PixelShader.h" />
+    <ClInclude Include="Graphics\Texture.h" />
+    <ClInclude Include="Graphics\Surface.h" />
+    <ClInclude Include="Graphics\Sampler.h" />
     <ClInclude Include="Utils\MouseCodes.h" />
     <ClInclude Include="Utils\KeyCodes.h" />
     <ClInclude Include="Core\Window.h" />
@@ -173,6 +181,13 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Graphics\Images\Billy.png">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </Image>
+    <Image Include="Graphics\Images\shot.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

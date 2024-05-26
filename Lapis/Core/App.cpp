@@ -5,6 +5,7 @@
 #include "Utils/KeyCodes.h"
 #include "Utils/MouseCodes.h"
 
+GDIPlusManager gdipm;
 
 App::App()
 {
@@ -35,18 +36,22 @@ bool App::Init()
     m_Window = std::make_unique<Window>();
     m_ClientWidth = m_Window->GetWindowWidth();
     m_ClientHeight = m_Window->GetWindowHeight();
+    //m_GDIManager = std::make_unique<GDIPlusManager>();
     GraphicsManager::Get().SetGraphicsManager(m_ClientWidth, m_ClientHeight, m_Window->GetWindow());
     GraphicsManager::Get().InitializeDirect3D();
     GraphicsManager::Get().CreateConstantBuffer();
     
     m_Camera = new Camera(AspectRatio());
     // Create cubes
-    for (int i = 0; i < 2; ++i) {
+    for (int i = 0; i < 3; ++i) {
         auto cube = std::make_unique<Cube>(GraphicsManager::Get().GetDevice(), 1);
         m_Cubes.push_back(std::move(cube));
     }
-    DirectX::XMFLOAT3 pos1(-2.0f, 0.0f, 0.0f);
+    DirectX::XMFLOAT3 pos1(-3.0f, 0.0f, 0.0f);
+    DirectX::XMFLOAT3 pos2(-7.0f, 0.0f, 0.0f);
     m_Cubes[1]->SetPosition(pos1);
+    m_Cubes[2]->SetPosition(pos2);
+
     m_Timer.Start();
     return true;
     

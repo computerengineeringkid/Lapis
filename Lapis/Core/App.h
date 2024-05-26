@@ -13,6 +13,8 @@
 #pragma comment(lib, "D3DCompiler.lib")
 #include <vector>
 #include "Graphics/Objects/Cube.h"
+#include "Graphics/GDIPlusManager.h"
+
 namespace wrl = Microsoft::WRL;
 
 class App
@@ -67,7 +69,7 @@ protected:
 	class Camera* m_Camera;
 	int m_ClientWidth, m_ClientHeight;
 	bool m_Enable4xMsaa;
-
+	//std::unique_ptr<class GDIPlusManager> m_GDIManager;
 	
 
 	std::vector<std::unique_ptr<Cube>> m_Cubes;

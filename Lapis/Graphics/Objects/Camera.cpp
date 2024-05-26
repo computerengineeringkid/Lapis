@@ -61,5 +61,5 @@ void Camera::Move(DirectX::XMVECTOR direction)
 
     // Update the view matrix
     UpdateViewMatrix();
-    UpdateViewMatrix();
+    
 }

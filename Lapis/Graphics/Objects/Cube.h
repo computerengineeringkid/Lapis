@@ -31,6 +31,7 @@ public:
     std::shared_ptr<PixelShader> GetPixelShader() const {
         return m_PixelShader;
     }
+    ;
 
 private:
     Microsoft::WRL::ComPtr<ID3D11Buffer> m_VertexBuffer;
@@ -38,6 +39,8 @@ private:
     Microsoft::WRL::ComPtr<ID3D11Buffer> m_InstanceBuffer; // Buffer for instance data
     std::shared_ptr<VertexShader> m_VertexShader;
     std::shared_ptr<PixelShader> m_PixelShader;
+    std::shared_ptr<class Texture> m_Texture;
+    std::shared_ptr<class Sampler> m_Sampler;
 
     int m_instanceCount;
 public:
