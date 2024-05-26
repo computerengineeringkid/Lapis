@@ -5,7 +5,7 @@
 #include "Utils/KeyCodes.h"
 #include "Utils/MouseCodes.h"
 
-GDIPlusManager gdipm;
+
 
 App::App()
 {
@@ -36,7 +36,7 @@ bool App::Init()
     m_Window = std::make_unique<Window>();
     m_ClientWidth = m_Window->GetWindowWidth();
     m_ClientHeight = m_Window->GetWindowHeight();
-    //m_GDIManager = std::make_unique<GDIPlusManager>();
+    m_GDIManager = std::make_unique<GDIPlusManager>();
     GraphicsManager::Get().SetGraphicsManager(m_ClientWidth, m_ClientHeight, m_Window->GetWindow());
     GraphicsManager::Get().InitializeDirect3D();
     GraphicsManager::Get().CreateConstantBuffer();
@@ -138,43 +138,43 @@ void App::ProcessInput()
     {
         m_Camera->Move(down);
     }
-    else if (IsKeyDown(LAPIS_KEY_E))
+     if (IsKeyDown(LAPIS_KEY_E))
     {
         m_Camera->Move(up);
     }
-    else if (IsKeyDown(LAPIS_KEY_D))
+     if (IsKeyDown(LAPIS_KEY_D))
     {
         m_Camera->Move(right);
     }
-    else if (IsKeyDown(LAPIS_KEY_A))
+     if (IsKeyDown(LAPIS_KEY_A))
     {
         m_Camera->Move(left);
     }
-    else if (IsKeyDown(LAPIS_KEY_W))
+     if (IsKeyDown(LAPIS_KEY_W))
     {
         m_Camera->Move(backward);
         
     } 
-    else if (IsKeyDown(LAPIS_KEY_S))
+     if (IsKeyDown(LAPIS_KEY_S))
     {
         
         m_Camera->Move(forward);
     }
     //------ arrows ------
     
-    else if (IsKeyDown(LAPIS_RIGHT_ARROW))
+     if (IsKeyDown(LAPIS_RIGHT_ARROW))
     {
         m_Camera->Move(right);
     }
-    else if (IsKeyDown(LAPIS_LEFT_ARROW))
+     if (IsKeyDown(LAPIS_LEFT_ARROW))
     {
         m_Camera->Move(left);
     }
-    else if (IsKeyDown(LAPIS_UP_ARROW))
+     if (IsKeyDown(LAPIS_UP_ARROW))
     {
         m_Camera->Move(up);
     }
-    else if (IsKeyDown(LAPIS_DOWN_ARROW))
+     if (IsKeyDown(LAPIS_DOWN_ARROW))
     {
         m_Camera->Move(down);
 
