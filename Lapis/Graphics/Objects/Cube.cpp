@@ -21,12 +21,22 @@ Cube::Cube(ID3D11Device* device, int instanceCount)
     if (!InitializeBuffers(device)) {
         std::cerr << "Error: Failed to initialize buffers." << std::endl;
     }
-    m_Texture = std::make_shared<Texture>(Surface::FromFile("Graphics\\Images\\Billy.png"));
-    m_Sampler = std::make_shared<Sampler>();
+    
 }
 
 Cube::~Cube()
 {
+}
+
+void Cube::Update(float deltaTime)
+{
+    if (canRotate)
+    {
+        float rotationSpeed = 1.0f;  // Define rotation speed
+        DirectX::XMFLOAT3 rotation = this->GetRotation();
+        rotation.y += deltaTime * rotationSpeed;  // Increment Y rotation based on elapsed time
+        this->SetRotation(rotation);
+    }
 }
 
 void Cube::Render(ID3D11DeviceContext* deviceContext)
@@ -34,8 +44,12 @@ void Cube::Render(ID3D11DeviceContext* deviceContext)
     m_VertexShader->Bind(deviceContext);
     m_PixelShader->Bind(deviceContext);
 
-    m_Texture->Bind();
-    m_Sampler->Bind();
+    if (m_Texture)
+    {
+        m_Texture->Bind();
+        m_Sampler->Bind();
+
+    }
 
     unsigned int strides[2] = { sizeof(Vertex), sizeof(InstanceData) };
     unsigned int offsets[2] = { 0, 0 };
@@ -49,12 +63,20 @@ void Cube::Render(ID3D11DeviceContext* deviceContext)
 
 void Cube::UpdateInstanceData(const InstanceData& data)
 {
-    D3D11_MAPPED_SUBRESOURCE mappedResource;
-    ZeroMemory(&mappedResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
-    auto deviceContext = GraphicsManager::Get().GetDeviceContext();
-    deviceContext->Map(m_InstanceBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-    memcpy(mappedResource.pData, &data, sizeof(InstanceData));  
-    deviceContext->Unmap(m_InstanceBuffer.Get(), 0);
+    if (m_instanceCount > 0) {
+        D3D11_MAPPED_SUBRESOURCE mappedResource;
+        ZeroMemory(&mappedResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
+        auto deviceContext = GraphicsManager::Get().GetDeviceContext();
+        deviceContext->Map(m_InstanceBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+        memcpy(mappedResource.pData, &data, sizeof(InstanceData));
+        deviceContext->Unmap(m_InstanceBuffer.Get(), 0);
+    }
+}
+
+void Cube::SetTexture(const std::string& path)
+{
+    m_Texture = std::make_shared<Texture>(Surface::FromFile(path));
+    m_Sampler = std::make_shared<Sampler>();
 }
 
 

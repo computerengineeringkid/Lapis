@@ -31,29 +31,20 @@ public:
 	bool Init();
 	void OnResize();
 	void UpdateScene(float deltaTime);
-	void DrawScene() ;
 	float AspectRatio() const;
 	bool ProcessMessages();
-	void RenderFrame();
+	void RenderScene(float deltaTime);
 	
 	
 protected:
-
-	
 	void CalculateFrameStats();
-	void ProcessInput();
-	bool IsKeyDown(int key);
-	bool IsMouseButtonDown(int button);
 
-	
-
-	
 private:
 	App();
 	App(const App&) = delete;
 	App& operator=(const App&) = delete;
 protected:
-	std::unique_ptr<Window> m_Window;
+	std::shared_ptr<Window> m_Window;
 	
 	bool m_AppPaused;
 	bool m_Minimized;
@@ -62,7 +53,9 @@ protected:
 	UINT m_4xMsaaQuality;
 	Timer m_Timer;
 public:
-	HWND& GetWindow() const { return m_Window->GetWindow(); }
+	HWND& GetWindowHandle() const { return m_Window->GetWindow(); }
+	Window* GetWindow() const { return m_Window.get(); }
+	
 
 protected:
 	

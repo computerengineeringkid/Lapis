@@ -21,13 +21,12 @@ public:
 	HWND& GetWindow() { return m_hWnd; }
 	int GetWindowWidth() { return m_Width; }
 	int GetWindowHeight() { return m_Height; }
-	bool IsKeyDown(int vKey);
-	bool IsMouseButtonDown(int button);
-	POINT GetMousePosition() const;
+	
 
 private:
 	HINSTANCE m_hInstance;
 	HWND m_hWnd;
 	int m_Width = 800, m_Height = 600;
+	friend class Input;
 };
 

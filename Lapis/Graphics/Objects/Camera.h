@@ -6,8 +6,9 @@ public:
 
 
     void SetProjectionMatrix(float aspectRatio);
-
+    void ProcessInput(float deltaTime);
     void UpdateViewMatrix();
+    void Update(float deltaTime);
     void Rotate(float dpitch, float dyaw);
     void Move(DirectX::XMVECTOR direction);
     DirectX::XMMATRIX GetViewMatrix() const {

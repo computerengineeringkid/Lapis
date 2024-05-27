@@ -20,7 +20,7 @@ class Cube : public GameObject {
 public:
     Cube(ID3D11Device* device, int instanceCount);
     ~Cube();
-
+    void Update(float deltaTime) override;
     void Render(ID3D11DeviceContext* deviceContext) override;
     void UpdateInstanceData(const InstanceData& data);
 
@@ -32,7 +32,7 @@ public:
         return m_PixelShader;
     }
     ;
-
+    void SetTexture(const std::string& path);
 private:
     Microsoft::WRL::ComPtr<ID3D11Buffer> m_VertexBuffer;
     Microsoft::WRL::ComPtr<ID3D11Buffer> m_IndexBuffer;
@@ -44,6 +44,6 @@ private:
 
     int m_instanceCount;
 public:
-
+    bool canRotate = false;
     bool InitializeBuffers(ID3D11Device* device);
 };
