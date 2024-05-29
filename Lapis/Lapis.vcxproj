@@ -150,6 +150,8 @@
     <ClCompile Include="Graphics\Surface.cpp" />
     <ClCompile Include="Graphics\Sampler.cpp" />
     <ClCompile Include="Core\Input.cpp" />
+    <ClCompile Include="Graphics\Objects\Model.cpp" />
+    <ClCompile Include="Graphics\ModelLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\GDIPlusManager.h" />
@@ -164,6 +166,8 @@
     <ClInclude Include="Graphics\Surface.h" />
     <ClInclude Include="Graphics\Sampler.h" />
     <ClInclude Include="Core\Input.h" />
+    <ClInclude Include="Graphics\Objects\Model.h" />
+    <ClInclude Include="Graphics\ModelLoader.h" />
     <ClInclude Include="Utils\MouseCodes.h" />
     <ClInclude Include="Utils\KeyCodes.h" />
     <ClInclude Include="Core\Window.h" />
@@ -189,7 +193,11 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </Image>
+    <Image Include="Graphics\Images\DefaultTexture.png" />
     <Image Include="Graphics\Images\shot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Graphics\Test.mtl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

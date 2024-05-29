@@ -1,6 +1,5 @@
 #pragma once
 #include <Windows.h>
-#include "Window.h"
 #include "Utils/Timer.h"
 #include <d3d11.h>
 #include <dxgi.h>
@@ -14,6 +13,7 @@
 #include <vector>
 #include "Graphics/Objects/Cube.h"
 #include "Graphics/GDIPlusManager.h"
+#include "Graphics/Objects/Model.h"
 
 namespace wrl = Microsoft::WRL;
 
@@ -29,7 +29,7 @@ public:
 	int Run();
 
 	bool Init();
-	void OnResize();
+	void OnResize(float width, float height);
 	void UpdateScene(float deltaTime);
 	float AspectRatio() const;
 	bool ProcessMessages();
@@ -44,7 +44,7 @@ private:
 	App(const App&) = delete;
 	App& operator=(const App&) = delete;
 protected:
-	std::shared_ptr<Window> m_Window;
+	std::shared_ptr<class Window> m_Window;
 	
 	bool m_AppPaused;
 	bool m_Minimized;
@@ -53,8 +53,8 @@ protected:
 	UINT m_4xMsaaQuality;
 	Timer m_Timer;
 public:
-	HWND& GetWindowHandle() const { return m_Window->GetWindow(); }
-	Window* GetWindow() const { return m_Window.get(); }
+	HWND& GetWindowHandle() const;
+	Window* GetWindow() const;
 	
 
 protected:
@@ -63,7 +63,7 @@ protected:
 	int m_ClientWidth, m_ClientHeight;
 	bool m_Enable4xMsaa;
 	std::unique_ptr<class GDIPlusManager> m_GDIManager;
-	
+	std::shared_ptr<Model> model;
 
 	std::vector<std::unique_ptr<Cube>> m_Cubes;
 

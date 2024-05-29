@@ -1,6 +1,15 @@
 #pragma once
 #include <DirectXMath.h>
 
+struct InstanceData {
+
+    DirectX::XMMATRIX world;
+};
+struct Vertex {
+    DirectX::XMFLOAT3 Pos;
+    DirectX::XMFLOAT4 Color;
+    DirectX::XMFLOAT2 TexCoord;
+};
 class GameObject {
 public:
     GameObject();

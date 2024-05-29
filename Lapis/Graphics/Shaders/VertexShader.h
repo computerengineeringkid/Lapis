@@ -1,10 +1,12 @@
 #pragma once
 #include "Shader.h"
+#include <vector>
 class VertexShader : public Shader {
 public:
     
     VertexShader(const std::wstring& filePath) : Shader(filePath) {}
     bool Initialize(ID3D11Device* device, std::string entryPoint = "VS", std::string shaderModel = "vs_5_0") override;
+    bool InitializeWithLayout(ID3D11Device* device, const std::vector<D3D11_INPUT_ELEMENT_DESC>& inputLayout, std::string entryPoint = "VS", std::string shaderModel = "vs_5_0");
     void Bind(ID3D11DeviceContext* deviceContext) override;
 
 private:

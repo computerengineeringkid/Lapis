@@ -1,22 +1,37 @@
 #include "Window.h"
+#include "App.h"
 
-LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-	switch (uMsg)
-	{
+#define WM_POST_RESIZE (WM_USER + 1)
+
+
+LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+	switch (uMsg) {
 	case WM_CLOSE:
-	{
 		DestroyWindow(hWnd);
 		break;
-	}
+
 	case WM_DESTROY:
-	{
 		PostQuitMessage(0);
-		return 0;
+		break;
+
+	case WM_SIZE:
+		if (wParam != SIZE_MINIMIZED) {
+			PostMessage(hWnd, WM_POST_RESIZE, wParam, lParam);
+		}
+		break;
+
+	case WM_POST_RESIZE:
+		// Ensure App is fully initialized before processing resize
+		 // Make sure you have a way to check if App is initialized
+			int newWidth = LOWORD(lParam);
+			int newHeight = HIWORD(lParam);
+			App::Get().OnResize(newWidth, newHeight);
+		
+		break;
 	}
-	}
-	return DefWindowProcA(hWnd, uMsg, wParam, lParam);
+	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
+
 
 Window::Window()
 	:m_hInstance(GetModuleHandle(nullptr))
@@ -31,7 +46,7 @@ Window::Window()
 	wndClass.lpfnWndProc = WindowProc;
 
 	RegisterClass(&wndClass);
-	DWORD style = WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU;
+	DWORD style = WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU | WS_THICKFRAME | WS_MAXIMIZEBOX;
 
 	
 	RECT rect;

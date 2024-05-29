@@ -1,17 +1,17 @@
+#pragma once
 #include "GameObject.h"
-#include <vector>
 #include <d3d11.h>
 #include <wrl.h>
+#include <memory>
 #include "Graphics/Shaders/VertexShader.h"
 #include "Graphics/Shaders/PixelShader.h"
-#include <memory>
 
-
-
-class Cube : public GameObject {
+class Model : public GameObject
+{
 public:
-    Cube(ID3D11Device* device, int instanceCount);
-    ~Cube();
+
+    Model(ID3D11Device* device, int instanceCount);
+    ~Model();
     void Update(float deltaTime) override;
     void Render(ID3D11DeviceContext* deviceContext) override;
     void UpdateInstanceData(const InstanceData& data);
@@ -39,3 +39,4 @@ public:
     bool canRotate = false;
     bool InitializeBuffers(ID3D11Device* device);
 };
+

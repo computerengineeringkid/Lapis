@@ -8,8 +8,9 @@ class Shader {
 public:
     Shader(const std::wstring& filePath);
     virtual bool Initialize(class ID3D11Device* device, std::string entryPoint, std::string shaderModel) = 0;
-    virtual void Bind(class ID3D11DeviceContext* deviceContext) = 0;
+    virtual void Bind(ID3D11DeviceContext* deviceContext) = 0;
 
+protected:
 protected:
     Microsoft::WRL::ComPtr<ID3DBlob> shaderBuffer;
     std::wstring filePath;

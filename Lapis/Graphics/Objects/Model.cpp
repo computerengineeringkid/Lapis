@@ -1,16 +1,19 @@
-#include "Cube.h"
+#include "Model.h"
 #include <iostream>
 #include "Graphics/GraphicsManager.h"
 #include "Graphics/Texture.h"
 #include "Graphics/Sampler.h"
 #include "Graphics/Surface.h"
+#include "Graphics/ModelLoader.h"
 
-Cube::Cube(ID3D11Device* device, int instanceCount)
+Model::Model(ID3D11Device* device, int instanceCount)
     :m_instanceCount(instanceCount)
+
 {
+    
     m_VertexShader = std::make_shared<VertexShader>(L"d");
     m_PixelShader = std::make_shared<PixelShader>(L"d");
-    
+
 
     if (!m_VertexShader->Initialize(device)) {
         // Handle errors
@@ -21,15 +24,13 @@ Cube::Cube(ID3D11Device* device, int instanceCount)
     if (!InitializeBuffers(device)) {
         std::cerr << "Error: Failed to initialize buffers." << std::endl;
     }
-    SetTexture("Graphics\\Images\\DefaultTexture.png");
-    
 }
 
-Cube::~Cube()
+Model::~Model()
 {
 }
 
-void Cube::Update(float deltaTime)
+void Model::Update(float deltaTime)
 {
     if (canRotate)
     {
@@ -40,7 +41,7 @@ void Cube::Update(float deltaTime)
     }
 }
 
-void Cube::Render(ID3D11DeviceContext* deviceContext)
+void Model::Render(ID3D11DeviceContext* deviceContext)
 {
     m_VertexShader->Bind(deviceContext);
     m_PixelShader->Bind(deviceContext);
@@ -62,7 +63,7 @@ void Cube::Render(ID3D11DeviceContext* deviceContext)
     deviceContext->DrawIndexedInstanced(36, m_instanceCount, 0, 0, 0);
 }
 
-void Cube::UpdateInstanceData(const InstanceData& data)
+void Model::UpdateInstanceData(const InstanceData& data)
 {
     if (m_instanceCount > 0) {
         D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -74,16 +75,24 @@ void Cube::UpdateInstanceData(const InstanceData& data)
     }
 }
 
-void Cube::SetTexture(const std::string& path)
+void Model::SetTexture(const std::string& path)
 {
     m_Texture = std::make_shared<Texture>(Surface::FromFile(path));
     m_Sampler = std::make_shared<Sampler>();
 }
 
 
-bool Cube::InitializeBuffers(ID3D11Device* device)
+bool Model::InitializeBuffers(ID3D11Device* device)
 {
     HRESULT hr;
+
+    // Load model data
+    std::vector<Vertex> vertices;
+    std::vector<DWORD> indices;
+    ModelLoader::LoadOBJModel("Graphics\\Test.obj", vertices, indices);
+
+    std::cout << "Loaded " << vertices.size() << " vertices and " << indices.size() << " indices.\n";
+
     // Instance buffer setup
     if (m_instanceCount > 0) {
         D3D11_BUFFER_DESC instanceBufferDesc = {};
@@ -91,70 +100,44 @@ bool Cube::InitializeBuffers(ID3D11Device* device)
         instanceBufferDesc.ByteWidth = sizeof(InstanceData) * m_instanceCount;
         instanceBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
         instanceBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-
-        hr = device->CreateBuffer(&instanceBufferDesc, nullptr, m_InstanceBuffer.GetAddressOf());
+        hr = device->CreateBuffer(&instanceBufferDesc, nullptr, &m_InstanceBuffer);
         if (FAILED(hr)) {
             std::cerr << "Failed to create instance buffer. HRESULT: " << std::hex << hr << std::endl;
             return false;
         }
     }
 
-    
-
-    const Vertex vertices[] = {
-        // Back face
-        {{-1.0f, -1.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}},  // Bottom right
-        {{ 1.0f, -1.0f, 1.0f}, {0.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},   // Bottom left
-        {{ 1.0f,  1.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}},    // Top left
-        {{-1.0f,  1.0f, 1.0f}, {0.5f, 0.5f, 0.5f, 1.0f}, {1.0f, 0.0f}},     // Top right
-        // Front face
-        {{-1.0f, -1.0f, -1.0f}, {1.0f, 1.0f, 0.0f, 1.0f}, {0.0f, 1.0f}}, // Bottom left
-        {{1.0f, -1.0f, -1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},  // Bottom right
-        {{1.0f, 1.0f, -1.0f}, {0.0f, 1.0f, 1.0f, 1.0f}, {1.0f, 0.0f}},   // Top right
-        {{-1.0f, 1.0f, -1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}},  // Top left
-
-    };
-    unsigned int indices[] = {
-    0, 1, 2, 0, 2, 3, // Front face
-    4, 6, 5, 4, 7, 6, // Back face
-    4, 5, 1, 4, 1, 0, // Bottom face
-    3, 2, 6, 3, 6, 7, // Top face
-    1, 5, 6, 1, 6, 2, // Right face
-    4, 0, 3, 4, 3, 7  // Left face
-       
-
-    };
+    // Vertex buffer setup
     D3D11_BUFFER_DESC vertexBufferDesc = {
-       sizeof(vertices),
-       D3D11_USAGE_DEFAULT,
-       D3D11_BIND_VERTEX_BUFFER,
-       0,
-       0,
-       sizeof(Vertex)
+        static_cast<UINT>(vertices.size() * sizeof(Vertex)),
+        D3D11_USAGE_DEFAULT,
+        D3D11_BIND_VERTEX_BUFFER,
+        0,
+        0,
+        0
     };
-    D3D11_SUBRESOURCE_DATA vertexData = { vertices, 0, 0 };
-
-    hr = device->CreateBuffer(&vertexBufferDesc, &vertexData, m_VertexBuffer.GetAddressOf());
+    D3D11_SUBRESOURCE_DATA vertexData = { vertices.data(), 0, 0 };
+    hr = device->CreateBuffer(&vertexBufferDesc, &vertexData, &m_VertexBuffer);
     if (FAILED(hr)) {
         std::cerr << "Failed to create vertex buffer. HRESULT: " << std::hex << hr << std::endl;
         return false;
     }
-    
+
+    // Index buffer setup
     D3D11_BUFFER_DESC indexBufferDesc = {
-        sizeof(indices),
+        static_cast<UINT>(indices.size() * sizeof(DWORD)),
         D3D11_USAGE_DEFAULT,
         D3D11_BIND_INDEX_BUFFER,
         0,
         0
     };
-    D3D11_SUBRESOURCE_DATA indexData = { indices, 0, 0 };
-
-    hr = device->CreateBuffer(&indexBufferDesc, &indexData, m_IndexBuffer.GetAddressOf());
+    D3D11_SUBRESOURCE_DATA indexData = { indices.data(), 0, 0 };
+    hr = device->CreateBuffer(&indexBufferDesc, &indexData, &m_IndexBuffer);
     if (FAILED(hr)) {
         std::cerr << "Failed to create index buffer. HRESULT: " << std::hex << hr << std::endl;
         return false;
     }
 
     return true;
-    
+
 }

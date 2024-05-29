@@ -6,5 +6,7 @@ public:
 	static bool IsKeyDown(int vKey);
 	static bool IsMouseButtonDown(int button);
 	static POINT GetMousePosition();
+	static float GetMousePositionX();
+	static float GetMousePositionY();
 };
 

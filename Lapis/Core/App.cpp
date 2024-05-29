@@ -1,4 +1,5 @@
 #include "App.h"
+#include "Window.h"
 #include <iostream>
 #include <string>
 #include "Graphics/Objects/Camera.h"
@@ -11,6 +12,16 @@ App::App()
     Init();
 }
 
+HWND& App::GetWindowHandle() const
+{
+     return m_Window->GetWindow();
+}
+
+Window* App::GetWindow() const
+{
+     return m_Window.get();
+}
+
 int App::Run()
 {
     bool running = true;
@@ -18,12 +29,13 @@ int App::Run()
     while (running)
     {
         double deltaTime = m_Timer.Tick();
-        std::cout << deltaTime << std::endl;
+        
         if (!ProcessMessages())
         {
             running = false;
         }
         UpdateScene(deltaTime);
+        
 
     }
     return 0;
@@ -40,6 +52,8 @@ bool App::Init()
     GraphicsManager::Get().CreateConstantBuffer();
     
     m_Camera = new Camera(AspectRatio());
+    //model = std::make_shared<Model>(GraphicsManager::Get().GetDevice(), 1);
+    //model->SetScale({ 0.1,0.1,0.1 });
     // Create cubes
     for (int i = 0; i < 3; ++i) {
         auto cube = std::make_unique<Cube>(GraphicsManager::Get().GetDevice(), 1);
@@ -51,14 +65,18 @@ bool App::Init()
     m_Cubes[2]->SetPosition(pos2);
     m_Cubes[1]->canRotate = true;
     m_Cubes[1]->SetTexture("Graphics\\Images\\Billy.png");
+    m_Cubes[0]->SetTexture("Graphics\\Images\\shot.png");
     m_Timer.Start();
     
     return true;
     
 }
 
-void App::OnResize()
+void App::OnResize(float width, float height)
 {
+    m_ClientWidth = width;
+    m_ClientHeight = height;
+    m_Camera->SetProjectionMatrix(AspectRatio());
 }
 
 void App::UpdateScene(float deltaTime)
@@ -101,6 +119,11 @@ void App::RenderScene(float deltaTime)
         // Render the cube
         cube->Render(GraphicsManager::Get().GetDeviceContext());
     }
+    InstanceData data;
+    /*data.world = DirectX::XMMatrixTranspose(model->CalculateWorldMatrix());
+    model->Update(deltaTime);
+    model->UpdateInstanceData(data);
+    model->Render(GraphicsManager::Get().GetDeviceContext());*/
     GraphicsManager::Get().UpdateConstantBuffer(viewMatrix, projectionMatrix);
 
     GraphicsManager::Get().RenderEnd();
@@ -109,6 +132,24 @@ void App::RenderScene(float deltaTime)
 
 void App::CalculateFrameStats()
 {
+    static int frameCount = 0;
+    static double timeElapsed = 0.0;
+    double deltaTime = m_Timer.Tick();  // Get the time elapsed since last frame
+    timeElapsed += deltaTime;
+    frameCount++;
+
+    // Update window title with FPS and frame time every second
+    if (timeElapsed >= 1.0) {
+        double fps = frameCount / timeElapsed;  // Average FPS over the second
+        double mspf = 1000.0 / fps;  // Milliseconds per frame
+
+        std::string windowText = "FPS: " + std::to_string(fps) + " Frame Time: " + std::to_string(mspf) + " ms";
+        SetWindowText(App::Get().GetWindowHandle(), windowText.c_str());
+
+        // Reset for the next average calculation
+        frameCount = 0;
+        timeElapsed = 0.0;
+    }
 }
 
 
