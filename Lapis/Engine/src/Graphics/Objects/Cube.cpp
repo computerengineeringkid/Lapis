@@ -21,7 +21,7 @@ Cube::Cube(ID3D11Device* device, int instanceCount)
     if (!InitializeBuffers(device)) {
         std::cerr << "Error: Failed to initialize buffers." << std::endl;
     }
-    SetTexture("Graphics\\Images\\DefaultTexture.png");
+    SetTexture("Engine\\src\\Graphics\\Images\\DefaultTexture.png");
     
 }
 

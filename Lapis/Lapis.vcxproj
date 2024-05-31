@@ -1,14 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug|Win32">
-      <Configuration>Debug</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|Win32">
-      <Configuration>Release</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
@@ -17,51 +9,39 @@
       <Configuration>Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Dist|x64">
+      <Configuration>Dist</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <VCProjectVersion>17.0</VCProjectVersion>
+    <ProjectGuid>{9E61950D-0A76-BDBE-D3F7-601E3FCBB9EF}</ProjectGuid>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{2dd93b6c-fb45-413d-9ab6-3ec197c8f49e}</ProjectGuid>
     <RootNamespace>Lapis</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
-  </ImportGroup>
-  <ImportGroup Label="Shared">
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -69,135 +49,152 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-    </ClCompile>
-    <Link>
-      <SubSystem>Console</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-    </ClCompile>
-    <Link>
-      <SubSystem>Console</SubSystem>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-    </Link>
-  </ItemDefinitionGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\bin\Debug-windows-x86_64\Lapis\</OutDir>
+    <IntDir>..\bin-int\Debug-windows-x86_64\Lapis\</IntDir>
+    <TargetName>Lapis</TargetName>
+    <TargetExt>.exe</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\bin\Release-windows-x86_64\Lapis\</OutDir>
+    <IntDir>..\bin-int\Release-windows-x86_64\Lapis\</IntDir>
+    <TargetName>Lapis</TargetName>
+    <TargetExt>.exe</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\bin\Dist-windows-x86_64\Lapis\</OutDir>
+    <IntDir>..\bin-int\Dist-windows-x86_64\Lapis\</IntDir>
+    <TargetName>Lapis</TargetName>
+    <TargetExt>.exe</TargetExt>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>IMGUI_DEFINE_MATH_OPERATORS;LAPIS_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>Engine\src;%(SolutionDir)\Lapis\Engine\ExternalDependencies\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalOptions>/MTd %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Ws2_32.lib;Winmm.lib;Version.lib;Bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <FxCompile>
-      <ObjectFileOutput>$(ProjectDir)%(Filename).cso</ObjectFileOutput>
-    </FxCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>IMGUI_DEFINE_MATH_OPERATORS;LAPIS_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>Engine\src;%(SolutionDir)\Lapis\Engine\ExternalDependencies\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalOptions>/MT %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Ws2_32.lib;Winmm.lib;Version.lib;Bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <FxCompile>
-      <ObjectFileOutput>$(ProjectDir)%(Filename).cso</ObjectFileOutput>
-    </FxCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>IMGUI_DEFINE_MATH_OPERATORS;LAPIS_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>Engine\src;%(SolutionDir)\Lapis\Engine\ExternalDependencies\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalOptions>/MT %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>Ws2_32.lib;Winmm.lib;Version.lib;Bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Graphics\GDIPlusManager.cpp" />
-    <ClCompile Include="Graphics\GraphicsManager.cpp" />
-    <ClCompile Include="Graphics\Objects\GameObject.cpp" />
-    <ClCompile Include="Graphics\Objects\Cube.cpp" />
-    <ClCompile Include="Graphics\Objects\Camera.cpp" />
-    <ClCompile Include="Core\App.cpp" />
-    <ClCompile Include="Core\Entry.cpp" />
-    <ClCompile Include="Core\Window.cpp" />
-    <ClCompile Include="Graphics\Shaders\Shader.cpp" />
-    <ClCompile Include="Graphics\Shaders\PixelShader.cpp" />
-    <ClCompile Include="Graphics\Shaders\VertexShader.cpp" />
-    <ClCompile Include="Graphics\Texture.cpp" />
-    <ClCompile Include="Graphics\Surface.cpp" />
-    <ClCompile Include="Graphics\Sampler.cpp" />
-    <ClCompile Include="Core\Input.cpp" />
-    <ClCompile Include="Graphics\Objects\Model.cpp" />
-    <ClCompile Include="Graphics\ModelLoader.cpp" />
+    <ClInclude Include="Engine\src\Core\App.h" />
+    <ClInclude Include="Engine\src\Core\Input.h" />
+    <ClInclude Include="Engine\src\Core\Window.h" />
+    <ClInclude Include="Engine\src\Graphics\GDIPlusManager.h" />
+    <ClInclude Include="Engine\src\Graphics\GraphicsManager.h" />
+    <ClInclude Include="Engine\src\Graphics\ModelLoader.h" />
+    <ClInclude Include="Engine\src\Graphics\Objects\Camera.h" />
+    <ClInclude Include="Engine\src\Graphics\Objects\Cube.h" />
+    <ClInclude Include="Engine\src\Graphics\Objects\GameObject.h" />
+    <ClInclude Include="Engine\src\Graphics\Objects\Model.h" />
+    <ClInclude Include="Engine\src\Graphics\Sampler.h" />
+    <ClInclude Include="Engine\src\Graphics\Shaders\PixelShader.h" />
+    <ClInclude Include="Engine\src\Graphics\Shaders\Shader.h" />
+    <ClInclude Include="Engine\src\Graphics\Shaders\VertexShader.h" />
+    <ClInclude Include="Engine\src\Graphics\Surface.h" />
+    <ClInclude Include="Engine\src\Graphics\Texture.h" />
+    <ClInclude Include="Engine\src\Utils\KeyCodes.h" />
+    <ClInclude Include="Engine\src\Utils\MouseCodes.h" />
+    <ClInclude Include="Engine\src\Utils\Timer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Graphics\GDIPlusManager.h" />
-    <ClInclude Include="Graphics\GraphicsManager.h" />
-    <ClInclude Include="Graphics\Objects\GameObject.h" />
-    <ClInclude Include="Graphics\Objects\Cube.h" />
-    <ClInclude Include="Graphics\Objects\Camera.h" />
-    <ClInclude Include="Core\App.h" />
-    <ClInclude Include="Graphics\Shaders\Shader.h" />
-    <ClInclude Include="Graphics\Shaders\PixelShader.h" />
-    <ClInclude Include="Graphics\Texture.h" />
-    <ClInclude Include="Graphics\Surface.h" />
-    <ClInclude Include="Graphics\Sampler.h" />
-    <ClInclude Include="Core\Input.h" />
-    <ClInclude Include="Graphics\Objects\Model.h" />
-    <ClInclude Include="Graphics\ModelLoader.h" />
-    <ClInclude Include="Utils\MouseCodes.h" />
-    <ClInclude Include="Utils\KeyCodes.h" />
-    <ClInclude Include="Core\Window.h" />
-    <ClInclude Include="Utils\Timer.h" />
-    <ClInclude Include="Graphics\Shaders\VertexShader.h" />
+    <ClCompile Include="Engine\src\Core\App.cpp" />
+    <ClCompile Include="Engine\src\Core\Entry.cpp" />
+    <ClCompile Include="Engine\src\Core\Input.cpp" />
+    <ClCompile Include="Engine\src\Core\Window.cpp" />
+    <ClCompile Include="Engine\src\Graphics\GDIPlusManager.cpp" />
+    <ClCompile Include="Engine\src\Graphics\GraphicsManager.cpp" />
+    <ClCompile Include="Engine\src\Graphics\ModelLoader.cpp" />
+    <ClCompile Include="Engine\src\Graphics\Objects\Camera.cpp" />
+    <ClCompile Include="Engine\src\Graphics\Objects\Cube.cpp" />
+    <ClCompile Include="Engine\src\Graphics\Objects\GameObject.cpp" />
+    <ClCompile Include="Engine\src\Graphics\Objects\Model.cpp" />
+    <ClCompile Include="Engine\src\Graphics\Sampler.cpp" />
+    <ClCompile Include="Engine\src\Graphics\Shaders\PixelShader.cpp" />
+    <ClCompile Include="Engine\src\Graphics\Shaders\Shader.cpp" />
+    <ClCompile Include="Engine\src\Graphics\Shaders\VertexShader.cpp" />
+    <ClCompile Include="Engine\src\Graphics\Surface.cpp" />
+    <ClCompile Include="Engine\src\Graphics\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Graphics\Shaders\PixelShader.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-    </FxCompile>
-    <FxCompile Include="Graphics\Shaders\VertexShader.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-    </FxCompile>
+    <CustomBuild Include="Engine\src\Graphics\Shaders\PixelShader.ps.hlsl">
+      <FileType>Document</FileType>
+      <Command>fxc /T ps_5_0 /E "main" /Fo "$(SolutionDir)/Lapis/%(Filename).cso" "%(Identity)"</Command>
+      <Outputs>PixelShader.ps.cso</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="Engine\src\Graphics\Shaders\VertexShader.vs.hlsl">
+      <FileType>Document</FileType>
+      <Command>fxc /T vs_5_0 /E "main" /Fo "$(SolutionDir)/Lapis/%(Filename).cso" "%(Identity)"</Command>
+      <Outputs>VertexShader.vs.cso</Outputs>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Graphics\Images\Billy.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </Image>
-    <Image Include="Graphics\Images\DefaultTexture.png" />
-    <Image Include="Graphics\Images\shot.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Graphics\Test.mtl" />
+    <ProjectReference Include="Engine\ExternalDependencies\imgui\ImGui.vcxproj">
+      <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

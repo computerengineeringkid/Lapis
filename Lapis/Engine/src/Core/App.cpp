@@ -64,8 +64,8 @@ bool App::Init()
     m_Cubes[1]->SetPosition(pos1);
     m_Cubes[2]->SetPosition(pos2);
     m_Cubes[1]->canRotate = true;
-    m_Cubes[1]->SetTexture("Graphics\\Images\\Billy.png");
-    m_Cubes[0]->SetTexture("Graphics\\Images\\shot.png");
+    m_Cubes[1]->SetTexture("Engine\\src\\Graphics\\Images\\Billy.png");
+    m_Cubes[0]->SetTexture("Engine\\src\\Graphics\\Images\\shot.png");
     m_Timer.Start();
     
     return true;

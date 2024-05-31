@@ -136,6 +136,7 @@ void GraphicsManager::CreateConstantBuffer()
     cbd.StructureByteStride = 0;
 
     
+    
     hr = GraphicsManager::Get().GetDevice()->CreateBuffer(&cbd, nullptr, &m_ConstantBuffer);
     if (FAILED(hr)) {
         std::cerr << "Failed to create constant buffer. HRESULT: " << hr << std::endl;

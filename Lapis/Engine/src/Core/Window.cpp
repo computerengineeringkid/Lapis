@@ -39,6 +39,7 @@ Window::Window()
 	const char* CLASS_NAME = "Renderer";
 
 	WNDCLASS wndClass = {};
+	
 	wndClass.lpszClassName = CLASS_NAME;
 	wndClass.hInstance = m_hInstance;
 	wndClass.hIcon = LoadIcon(NULL, IDI_WINLOGO);
@@ -56,7 +57,7 @@ Window::Window()
 	rect.bottom = rect.top + m_Height;
 
 	AdjustWindowRect(&rect, style, false);
-	m_hWnd = CreateWindowExA(
+	m_hWnd = CreateWindowEx(
 		0,
 		CLASS_NAME,
 		CLASS_NAME,

@@ -12,7 +12,7 @@ bool VertexShader::Initialize(ID3D11Device* device, std::string entryPoint, std:
         return false;
     }
     Microsoft::WRL::ComPtr<ID3DBlob> pBlob;
-    hr = D3DReadFileToBlob(L"VertexShader.cso", &pBlob);
+    hr = D3DReadFileToBlob(L"VertexShader.vs.cso", &pBlob);
     // Create the pixel shader
     hr = device->CreateVertexShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, m_VertexShader.GetAddressOf());
     if (FAILED(hr)) {
@@ -49,7 +49,7 @@ bool VertexShader::InitializeWithLayout(ID3D11Device* device, const std::vector<
 
     HRESULT hr;
     Microsoft::WRL::ComPtr<ID3DBlob> pBlob;
-    hr = D3DReadFileToBlob(L"VertexShader.cso", &pBlob);
+    hr = D3DReadFileToBlob(L"VertexShader.vs.cso", &pBlob);
 
     device->CreateInputLayout(
         inputLayout.data(), (UINT)std::size(inputLayout),

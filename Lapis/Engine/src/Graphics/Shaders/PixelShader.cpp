@@ -12,7 +12,7 @@ bool PixelShader::Initialize(ID3D11Device* device, std::string entryPoint, std::
         return false;
     }
     Microsoft::WRL::ComPtr<ID3DBlob> pBlob;
-    hr = D3DReadFileToBlob(L"PixelShader.cso", &pBlob);
+    hr = D3DReadFileToBlob(L"PixelShader.ps.cso", &pBlob);
     // Create the pixel shader
     hr = device->CreatePixelShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, m_PixelShader.GetAddressOf());
     if (FAILED(hr)) {

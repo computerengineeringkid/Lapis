@@ -1,147 +1,140 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="Core">
+      <UniqueIdentifier>{2EB4837C-1AEB-840D-C3D7-6A10AFED000F}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{1653CE33-0220-293F-2B39-17E717655ECD}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Graphics\Objects">
+      <UniqueIdentifier>{CFA7C28A-BBA0-E1DC-E4D2-C661D02AC1E8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Shaders">
+      <UniqueIdentifier>{EF2D07CC-DB26-261E-0459-0BA3F0B0052A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{F68B420E-62A0-6ABF-2B22-0E1F97F566F0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Core\Entry.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Window.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\App.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Objects\Camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Objects\Cube.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Objects\GameObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\GraphicsManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Shaders\Shader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Shaders\VertexShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Shaders\PixelShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Surface.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Sampler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\GDIPlusManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Input.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\ModelLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Objects\Model.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Core\Window.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Engine\src\Core\App.h">
+      <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Core\App.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Engine\src\Core\Input.h">
+      <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\Timer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Engine\src\Core\Window.h">
+      <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Objects\Camera.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Engine\src\Graphics\GDIPlusManager.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\KeyCodes.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Engine\src\Graphics\GraphicsManager.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Objects\Cube.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Engine\src\Graphics\ModelLoader.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Objects\GameObject.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Engine\src\Graphics\Objects\Camera.h">
+      <Filter>Graphics\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\GraphicsManager.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Engine\src\Graphics\Objects\Cube.h">
+      <Filter>Graphics\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Shaders\Shader.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Engine\src\Graphics\Objects\GameObject.h">
+      <Filter>Graphics\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Shaders\VertexShader.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Engine\src\Graphics\Objects\Model.h">
+      <Filter>Graphics\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Shaders\PixelShader.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Engine\src\Graphics\Sampler.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\MouseCodes.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Engine\src\Graphics\Shaders\PixelShader.h">
+      <Filter>Graphics\Shaders</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Texture.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Engine\src\Graphics\Shaders\Shader.h">
+      <Filter>Graphics\Shaders</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Surface.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Engine\src\Graphics\Shaders\VertexShader.h">
+      <Filter>Graphics\Shaders</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Sampler.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Engine\src\Graphics\Surface.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\GDIPlusManager.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Engine\src\Graphics\Texture.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Input.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Engine\src\Utils\KeyCodes.h">
+      <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\ModelLoader.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Engine\src\Utils\MouseCodes.h">
+      <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Objects\Model.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Engine\src\Utils\Timer.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Graphics\Shaders\VertexShader.hlsl" />
-    <FxCompile Include="Graphics\Shaders\PixelShader.hlsl" />
+    <ClCompile Include="Engine\src\Core\App.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Core\Entry.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Core\Input.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Core\Window.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Graphics\GDIPlusManager.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Graphics\GraphicsManager.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Graphics\ModelLoader.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Graphics\Objects\Camera.cpp">
+      <Filter>Graphics\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Graphics\Objects\Cube.cpp">
+      <Filter>Graphics\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Graphics\Objects\GameObject.cpp">
+      <Filter>Graphics\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Graphics\Objects\Model.cpp">
+      <Filter>Graphics\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Graphics\Sampler.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Graphics\Shaders\PixelShader.cpp">
+      <Filter>Graphics\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Graphics\Shaders\Shader.cpp">
+      <Filter>Graphics\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Graphics\Shaders\VertexShader.cpp">
+      <Filter>Graphics\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Graphics\Surface.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Graphics\Texture.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Graphics\Images\shot.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Graphics\Images\Billy.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Graphics\Images\DefaultTexture.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Graphics\Test.mtl" />
+    <CustomBuild Include="Engine\src\Graphics\Shaders\PixelShader.ps.hlsl">
+      <Filter>Graphics\Shaders</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Engine\src\Graphics\Shaders\VertexShader.vs.hlsl">
+      <Filter>Graphics\Shaders</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>
