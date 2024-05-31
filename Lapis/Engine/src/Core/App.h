@@ -14,6 +14,8 @@
 #include "Graphics/Objects/Cube.h"
 #include "Graphics/GDIPlusManager.h"
 #include "Graphics/Objects/Model.h"
+#include "Graphics/ImGui/ImGuiManager.h"
+
 
 namespace wrl = Microsoft::WRL;
 
@@ -52,6 +54,7 @@ protected:
 	bool m_Resizing;
 	UINT m_4xMsaaQuality;
 	Timer m_Timer;
+	std::unique_ptr<ImGuiManager> m_ImGuiManager;
 public:
 	HWND& GetWindowHandle() const;
 	Window* GetWindow() const;
@@ -62,10 +65,11 @@ protected:
 	class Camera* m_Camera;
 	int m_ClientWidth, m_ClientHeight;
 	bool m_Enable4xMsaa;
-	std::unique_ptr<class GDIPlusManager> m_GDIManager;
+	std::unique_ptr<GDIPlusManager> m_GDIManager;
 	std::shared_ptr<Model> model;
 
 	std::vector<std::unique_ptr<Cube>> m_Cubes;
+
 
 	
 	

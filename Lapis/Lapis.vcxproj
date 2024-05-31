@@ -79,7 +79,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>IMGUI_DEFINE_MATH_OPERATORS;LAPIS_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>Engine\src;%(SolutionDir)\Lapis\Engine\ExternalDependencies\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Engine\src;Engine\ExternalDependencies\imgui;Engine\ExternalDependencies\imgui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -98,7 +98,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>IMGUI_DEFINE_MATH_OPERATORS;LAPIS_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>Engine\src;%(SolutionDir)\Lapis\Engine\ExternalDependencies\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Engine\src;Engine\ExternalDependencies\imgui;Engine\ExternalDependencies\imgui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -121,7 +121,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>IMGUI_DEFINE_MATH_OPERATORS;LAPIS_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>Engine\src;%(SolutionDir)\Lapis\Engine\ExternalDependencies\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Engine\src;Engine\ExternalDependencies\imgui;Engine\ExternalDependencies\imgui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -145,6 +145,7 @@
     <ClInclude Include="Engine\src\Core\Window.h" />
     <ClInclude Include="Engine\src\Graphics\GDIPlusManager.h" />
     <ClInclude Include="Engine\src\Graphics\GraphicsManager.h" />
+    <ClInclude Include="Engine\src\Graphics\ImGui\ImGuiManager.h" />
     <ClInclude Include="Engine\src\Graphics\ModelLoader.h" />
     <ClInclude Include="Engine\src\Graphics\Objects\Camera.h" />
     <ClInclude Include="Engine\src\Graphics\Objects\Cube.h" />
@@ -167,6 +168,7 @@
     <ClCompile Include="Engine\src\Core\Window.cpp" />
     <ClCompile Include="Engine\src\Graphics\GDIPlusManager.cpp" />
     <ClCompile Include="Engine\src\Graphics\GraphicsManager.cpp" />
+    <ClCompile Include="Engine\src\Graphics\ImGui\ImGuiManager.cpp" />
     <ClCompile Include="Engine\src\Graphics\ModelLoader.cpp" />
     <ClCompile Include="Engine\src\Graphics\Objects\Camera.cpp" />
     <ClCompile Include="Engine\src\Graphics\Objects\Cube.cpp" />

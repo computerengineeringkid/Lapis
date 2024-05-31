@@ -4,6 +4,7 @@ C:\Users\WW27H\Desktop\Lapis\Lapis\Engine\src\Core\Input.cpp;C:\Users\WW27H\Desk
 C:\Users\WW27H\Desktop\Lapis\Lapis\Engine\src\Core\Window.cpp;C:\Users\WW27H\Desktop\Lapis\bin-int\Debug-windows-x86_64\Lapis\Window.obj
 C:\Users\WW27H\Desktop\Lapis\Lapis\Engine\src\Graphics\GDIPlusManager.cpp;C:\Users\WW27H\Desktop\Lapis\bin-int\Debug-windows-x86_64\Lapis\GDIPlusManager.obj
 C:\Users\WW27H\Desktop\Lapis\Lapis\Engine\src\Graphics\GraphicsManager.cpp;C:\Users\WW27H\Desktop\Lapis\bin-int\Debug-windows-x86_64\Lapis\GraphicsManager.obj
+C:\Users\WW27H\Desktop\Lapis\Lapis\Engine\src\Graphics\ImGui\ImGuiManager.cpp;C:\Users\WW27H\Desktop\Lapis\bin-int\Debug-windows-x86_64\Lapis\ImGuiManager.obj
 C:\Users\WW27H\Desktop\Lapis\Lapis\Engine\src\Graphics\ModelLoader.cpp;C:\Users\WW27H\Desktop\Lapis\bin-int\Debug-windows-x86_64\Lapis\ModelLoader.obj
 C:\Users\WW27H\Desktop\Lapis\Lapis\Engine\src\Graphics\Objects\Camera.cpp;C:\Users\WW27H\Desktop\Lapis\bin-int\Debug-windows-x86_64\Lapis\Camera.obj
 C:\Users\WW27H\Desktop\Lapis\Lapis\Engine\src\Graphics\Objects\Cube.cpp;C:\Users\WW27H\Desktop\Lapis\bin-int\Debug-windows-x86_64\Lapis\Cube.obj

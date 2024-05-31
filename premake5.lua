@@ -12,7 +12,9 @@ workspace "Lapis"
 	--Include directories relative to root folder(solution dir)
 	IncludeDir = {}
 	--IncludeDir["stb_image"] =	"$(SolutionDir)/Blu/engine/ExternalDependencies/stb_image"
-    IncludeDir["ImGui"] = "%(SolutionDir)/Lapis/Engine/ExternalDependencies/imgui"
+    IncludeDir["ImGui"] = "%{wks.location}/Lapis/Engine/ExternalDependencies/imgui"
+	IncludeDir["ImGuiBackends"] = "%{wks.location}/Lapis/Engine/ExternalDependencies/imgui/backends"
+
 	print("Workspace location: " .. _WORKING_DIR)
 
 
@@ -90,6 +92,7 @@ project "Lapis"
 		
 		"%{wks.location}/Lapis/Engine/src",
 		"%{IncludeDir.ImGui}",
+		"%{IncludeDir.ImGuiBackends}"
 	}
 	
 	links

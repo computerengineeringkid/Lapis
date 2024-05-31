@@ -7,6 +7,9 @@
     <Filter Include="Graphics">
       <UniqueIdentifier>{1653CE33-0220-293F-2B39-17E717655ECD}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\ImGui">
+      <UniqueIdentifier>{C0408A88-AC0E-7E8E-95A2-EEB4810F5AF3}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Graphics\Objects">
       <UniqueIdentifier>{CFA7C28A-BBA0-E1DC-E4D2-C661D02AC1E8}</UniqueIdentifier>
     </Filter>
@@ -32,6 +35,9 @@
     </ClInclude>
     <ClInclude Include="Engine\src\Graphics\GraphicsManager.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\Graphics\ImGui\ImGuiManager.h">
+      <Filter>Graphics\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="Engine\src\Graphics\ModelLoader.h">
       <Filter>Graphics</Filter>
@@ -94,6 +100,9 @@
     </ClCompile>
     <ClCompile Include="Engine\src\Graphics\GraphicsManager.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Graphics\ImGui\ImGuiManager.cpp">
+      <Filter>Graphics\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="Engine\src\Graphics\ModelLoader.cpp">
       <Filter>Graphics</Filter>

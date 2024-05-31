@@ -36,6 +36,7 @@ int App::Run()
         }
         UpdateScene(deltaTime);
         
+        
 
     }
     return 0;
@@ -50,6 +51,7 @@ bool App::Init()
     GraphicsManager::Get().SetGraphicsManager(m_ClientWidth, m_ClientHeight, m_Window->GetWindow());
     GraphicsManager::Get().InitializeDirect3D();
     GraphicsManager::Get().CreateConstantBuffer();
+    m_ImGuiManager = std::make_unique<ImGuiManager>(GraphicsManager::Get().GetDevice(), GraphicsManager::Get().GetDeviceContext(),m_Window->GetWindow());
     
     m_Camera = new Camera(AspectRatio());
     //model = std::make_shared<Model>(GraphicsManager::Get().GetDevice(), 1);
@@ -125,7 +127,7 @@ void App::RenderScene(float deltaTime)
     model->UpdateInstanceData(data);
     model->Render(GraphicsManager::Get().GetDeviceContext());*/
     GraphicsManager::Get().UpdateConstantBuffer(viewMatrix, projectionMatrix);
-
+    m_ImGuiManager->Render();
     GraphicsManager::Get().RenderEnd();
 }
 
