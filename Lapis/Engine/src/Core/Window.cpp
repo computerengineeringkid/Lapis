@@ -1,10 +1,13 @@
 #include "Window.h"
 #include "App.h"
+#include "imgui.h"
+#include "Core/Input.h"
 
 #define WM_POST_RESIZE (WM_USER + 1)
 
 
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+	
 	switch (uMsg) {
 	case WM_CLOSE:
 		DestroyWindow(hWnd);
@@ -89,10 +92,11 @@ bool Window::ProcessMessages()
 	{
 		if (msg.message == WM_QUIT)
 			return false;
-		
+
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
+
 	return true;
 }
 

@@ -2,6 +2,10 @@
 #include "Window.h"
 #include <iostream>
 #include <string>
+#include "imgui.h"
+#include "Utils/KeyCodes.h"
+#include "Utils/MouseCodes.h"
+#include "Core/Input.h"
 #include "Graphics/Objects/Camera.h"
 
 
@@ -79,6 +83,9 @@ void App::OnResize(float width, float height)
     m_ClientWidth = width;
     m_ClientHeight = height;
     m_Camera->SetProjectionMatrix(AspectRatio());
+    
+    ImGuiIO& io = ImGui::GetIO();
+    io.DisplaySize = ImVec2(m_ClientWidth, m_ClientHeight);
 }
 
 void App::UpdateScene(float deltaTime)
@@ -96,7 +103,33 @@ float App::AspectRatio() const
 
 bool App::ProcessMessages()
 {
-    return m_Window->ProcessMessages();
+    
+
+    // Process window messages
+    if (!m_Window->ProcessMessages())
+        return false;
+
+    
+    ImGuiIO& io = ImGui::GetIO();
+    // Update mouse position
+    POINT mousePos = Input::GetMousePosition();
+    io.MousePos = ImVec2(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
+
+    // Update mouse button states
+    io.MouseDown[0] = Input::IsMouseButtonDown(LAPIS_MOUSE_BUTTON_LEFT);
+    io.MouseDown[1] = Input::IsMouseButtonDown(LAPIS_MOUSE_BUTTON_RIGHT);
+    io.MouseDown[2] = Input::IsMouseButtonDown(LAPIS_MOUSE_BUTTON_MIDDLE);
+
+    // Update keyboard states
+    for (int key = 0x00; key < 0xFF; key++) {
+        io.KeysDown[key] = Input::IsKeyDown(key);
+    }                     
+    // Update modifier keys
+    io.KeyCtrl = Input::IsKeyDown(LAPIS_CTRL);
+    io.KeyShift = Input::IsKeyDown(LAPIS_SHIFT);
+    io.KeyAlt = Input::IsKeyDown(LAPIS_ALT);
+
+    return true;
 }
 
 

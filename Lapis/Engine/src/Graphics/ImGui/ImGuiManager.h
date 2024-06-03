@@ -12,7 +12,7 @@ public:
     void BeginFrame();
     void EndFrame();
     void Render();
-    void NewFrame(); // Optionally handle more specific new frame operations if needed
+    //void NewFrame(); // Optionally handle more specific new frame operations if needed
 
 private:
     void SetupImGuiStyle();
