@@ -7,6 +7,9 @@
 #include "Utils/MouseCodes.h"
 #include "Core/Input.h"
 #include "Graphics/Objects/Camera.h"
+#include <assimp/Exporter.hpp>
+
+
 
 
 
@@ -87,6 +90,7 @@ void App::OnResize(float width, float height)
     ImGuiIO& io = ImGui::GetIO();
     io.DisplaySize = ImVec2(m_ClientWidth, m_ClientHeight);
 }
+
 
 void App::UpdateScene(float deltaTime)
 {

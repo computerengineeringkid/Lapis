@@ -13,23 +13,17 @@ workspace "Lapis"
 	IncludeDir = {}
 	--IncludeDir["stb_image"] =	"$(SolutionDir)/Blu/engine/ExternalDependencies/stb_image"
     IncludeDir["ImGui"] = "%{wks.location}/Lapis/Engine/ExternalDependencies/imgui"
+    IncludeDir["Assimp"] = "%{wks.location}/Lapis/Engine/ExternalDependencies/assimp/include"
 	IncludeDir["ImGuiBackends"] = "%{wks.location}/Lapis/Engine/ExternalDependencies/imgui/backends"
+    
 
 	print("Workspace location: " .. _WORKING_DIR)
 
-
-	
-	
-	
-
-
 	LibraryDir = {}
+    LibraryDir["Assimp"] = "%{wks.location}/Lapis/Engine/ExternalDependencies/assimp/bin/Debug-windows-x86_64/Assimp"
 
-	
-
-	Library = {}
-
-	
+    Library = {}
+    Library["Assimp"] = "%{LibraryDir.Assimp}/assimp.lib"
 
 	--Windows
 	Library["WinSock"] = "Ws2_32.lib"
@@ -52,6 +46,7 @@ workspace "Lapis"
 group"Dependencies"
 	
 	include "Lapis/Engine/ExternalDependencies/imgui"
+	include "Lapis/Engine/ExternalDependencies/assimp"
 	
 -- Setup multiple premake files per directory so we can include them in here
 
@@ -92,13 +87,16 @@ project "Lapis"
 		
 		"%{wks.location}/Lapis/Engine/src",
 		"%{IncludeDir.ImGui}",
-		"%{IncludeDir.ImGuiBackends}"
+		"%{IncludeDir.ImGuiBackends}",
+		"%{IncludeDir.Assimp}",
+        
 	}
 	
 	links
 	{
 		
 		"ImGui",
+		--"%{Library.Assimp}"
 		
 		
 		
@@ -141,6 +139,8 @@ filter "files:**.ps.hlsl"
 		{
 			
 			"IMGUI_DEFINE_MATH_OPERATORS",
+			"ASSIMP_BUILD_NO_EXPORT",   -- Ensures that we are not trying to export symbols
+			"ODDL_STATIC_LIB"           -- Define
 			
 		}
 
