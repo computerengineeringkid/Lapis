@@ -2,6 +2,7 @@
 #include <d3d11.h>
 #include <wrl.h>
 #include <DirectXMath.h>
+#include <vector>
 
 
 namespace wrl = Microsoft::WRL;
@@ -21,8 +22,10 @@ public:
     void ClearBuffer(float red, float green, float blue);
     void CreateDepthBuffer();
     void CreateConstantBuffer();
+    void CreateMaterialBuffer();
     void UpdateConstantBuffer(const DirectX::XMMATRIX& viewMatrix, const DirectX::XMMATRIX& projectionMatrix);
-    
+    void UpdateMaterialBuffer(const std::vector<DirectX::XMFLOAT4>& materials);
+    std::vector<DirectX::XMFLOAT4>& GetMaterials() { return m_Materials; }
 
     ID3D11Device* GetDevice() const;
     ID3D11DeviceContext* GetDeviceContext() const;
@@ -41,6 +44,7 @@ private:
     wrl::ComPtr<ID3D11DepthStencilState> m_DepthStencilState;
     wrl::ComPtr<ID3D11Texture2D> m_DepthStencilBuffer;
     wrl::ComPtr<ID3D11Buffer> m_ConstantBuffer;
+    wrl::ComPtr<ID3D11Buffer> m_MaterialBuffer;
 
 
     D3D11_VIEWPORT m_ScreenViewport;
@@ -54,4 +58,6 @@ private:
     int m_ClientWidth;
     int m_ClientHeight;
     HWND m_hWnd;
+
+    std::vector<DirectX::XMFLOAT4> m_Materials;
 };

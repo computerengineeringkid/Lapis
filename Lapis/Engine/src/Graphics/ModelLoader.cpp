@@ -1,61 +1,95 @@
 #include "ModelLoader.h"
+#include <iostream>
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+#include <assimp/material.h>
+#include "ModelLoader.h"
+#include <iostream>
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+#include <assimp/material.h>
 
+#include "ModelLoader.h"
+#include <iostream>
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+#include <assimp/material.h>
 
-void ModelLoader::LoadOBJModel(std::string filename, std::vector<Vertex>& vertices, std::vector<DWORD>& indices)
+void ModelLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene, std::vector<Vertex>& vertices, std::vector<unsigned int>& indices)
 {
-    std::ifstream file(filename);
-    if (!file.is_open()) {
-        throw std::runtime_error("Failed to open file: " + filename);
-    }
+    DirectX::XMFLOAT4 defaultColor(1.0f, 1.0f, 1.0f, 1.0f); // Default to white color if no material color
 
-    std::string line;
-    std::vector<DirectX::XMFLOAT3> positions;
-    std::vector<DirectX::XMFLOAT2> texCoords;
-
-    while (std::getline(file, line)) {
-        std::istringstream iss(line);
-        std::string prefix;
-        iss >> prefix;
-
-        if (prefix == "v") {
-            DirectX::XMFLOAT3 pos;
-            iss >> pos.x >> pos.y >> pos.z;
-            positions.push_back(pos);
-        }
-        else if (prefix == "vt") {
-            DirectX::XMFLOAT2 tex;
-            iss >> tex.x >> tex.y;
-            texCoords.push_back(tex);
-        }
-        else if (prefix == "f") {
-            for (int i = 0; i < 3; i++) {
-                std::string vertexData;
-                iss >> vertexData;
-                std::istringstream vertexStream(vertexData);
-                std::string vertexIndex, texIndex;
-                std::getline(vertexStream, vertexIndex, '/');
-                std::getline(vertexStream, texIndex, '/');
-
-                Vertex vertex;
-                vertex.Pos = positions[std::stoi(vertexIndex) - 1];
-                vertex.Color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);  // Default white color
-
-                if (!texIndex.empty() && !texCoords.empty()) {
-                    int texIdx = std::stoi(texIndex) - 1;
-                    if (texIdx >= 0 && texIdx < texCoords.size()) {
-                        vertex.TexCoord = texCoords[texIdx];
-                    }
-                    else {
-                        vertex.TexCoord = DirectX::XMFLOAT2(0.0f, 0.0f); // Default texture coordinates
-                    }
-                }
-                else {
-                    vertex.TexCoord = DirectX::XMFLOAT2(0.0f, 0.0f); // Default texture coordinates
-                }
-
-                vertices.push_back(vertex);
-                indices.push_back(static_cast<DWORD>(vertices.size() - 1));
-            }
+    if (mesh->mMaterialIndex >= 0)
+    {
+        aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+        aiColor4D color;
+        if (AI_SUCCESS == aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &color))
+        {
+            defaultColor = DirectX::XMFLOAT4(color.r, color.g, color.b, color.a);
         }
     }
+
+    for (unsigned int i = 0; i < mesh->mNumVertices; i++)
+    {
+        Vertex vertex;
+        vertex.Pos = DirectX::XMFLOAT3(mesh->mVertices[i].x, mesh->mVertices[i].z, mesh->mVertices[i].y); // Swap Y and Z
+
+        // Assign vertex color if available, otherwise use the default material color
+        if (mesh->HasVertexColors(0))
+        {
+            vertex.Color = DirectX::XMFLOAT4(mesh->mColors[0][i].r, mesh->mColors[0][i].g, mesh->mColors[0][i].b, mesh->mColors[0][i].a);
+        }
+        else
+        {
+            vertex.Color = defaultColor;
+        }
+
+        if (mesh->mTextureCoords[0])
+        {
+            vertex.TexCoord = DirectX::XMFLOAT2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
+        }
+        else
+        {
+            vertex.TexCoord = DirectX::XMFLOAT2(0.0f, 0.0f);
+        }
+        vertices.push_back(vertex);
+    }
+
+    for (unsigned int i = 0; i < mesh->mNumFaces; i++)
+    {
+        aiFace face = mesh->mFaces[i];
+        for (unsigned int j = 0; j < face.mNumIndices; j++)
+            indices.push_back(face.mIndices[j]);
+    }
+}
+
+void ModelLoader::ProcessNode(aiNode* node, const aiScene* scene, std::vector<Vertex>& vertices, std::vector<unsigned int>& indices)
+{
+    for (unsigned int i = 0; i < node->mNumMeshes; i++)
+    {
+        aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+        ProcessMesh(mesh, scene, vertices, indices);
+    }
+
+    for (unsigned int i = 0; i < node->mNumChildren; i++)
+    {
+        ProcessNode(node->mChildren[i], scene, vertices, indices);
+    }
+}
+
+void ModelLoader::LoadModel(const std::string& path, std::vector<Vertex>& vertices, std::vector<unsigned int>& indices)
+{
+    Assimp::Importer importer;
+    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType);
+
+    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+    {
+        std::cerr << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
+        return;
+    }
+
+    ProcessNode(scene->mRootNode, scene, vertices, indices);
 }

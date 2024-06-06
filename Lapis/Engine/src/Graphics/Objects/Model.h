@@ -34,6 +34,9 @@ private:
     std::shared_ptr<class Texture> m_Texture;
     std::shared_ptr<class Sampler> m_Sampler;
 
+    std::vector<Vertex> m_Vertices;
+    std::vector<unsigned int> m_Indices;
+
     int m_instanceCount;
 public:
     bool canRotate = false;

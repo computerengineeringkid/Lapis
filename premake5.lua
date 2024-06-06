@@ -96,7 +96,7 @@ project "Lapis"
 	{
 		
 		"ImGui",
-		--"%{Library.Assimp}"
+		"%{Library.Assimp}"
 		
 		
 		
@@ -140,7 +140,8 @@ filter "files:**.ps.hlsl"
 			
 			"IMGUI_DEFINE_MATH_OPERATORS",
 			"ASSIMP_BUILD_NO_EXPORT",   -- Ensures that we are not trying to export symbols
-			"ODDL_STATIC_LIB"           -- Define
+			"ODDL_STATIC_LIB",           -- Define
+			"AI_CONFIG_PP_PTV_KEEP_HIERARCHY=1"
 			
 		}
 

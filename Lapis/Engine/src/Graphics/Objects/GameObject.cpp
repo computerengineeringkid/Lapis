@@ -25,7 +25,10 @@ void GameObject::SetPosition(const DirectX::XMFLOAT3& pos) {
 }
 
 void GameObject::SetRotation(const DirectX::XMFLOAT3& rot) {
-    rotation = rot;
+    // Convert degrees to radians
+    rotation.x = DirectX::XMConvertToRadians(rot.x);
+    rotation.y = DirectX::XMConvertToRadians(rot.y);
+    rotation.z = DirectX::XMConvertToRadians(rot.z);
 }
 
 void GameObject::SetScale(const DirectX::XMFLOAT3& scl) {

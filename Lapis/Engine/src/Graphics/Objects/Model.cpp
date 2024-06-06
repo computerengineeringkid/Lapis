@@ -6,6 +6,7 @@
 #include "Graphics/Surface.h"
 #include "Graphics/ModelLoader.h"
 
+
 Model::Model(ID3D11Device* device, int instanceCount)
     :m_instanceCount(instanceCount)
 
@@ -60,7 +61,7 @@ void Model::Render(ID3D11DeviceContext* deviceContext)
     deviceContext->IASetVertexBuffers(0, 2, buffers, strides, offsets);
     deviceContext->IASetIndexBuffer(m_IndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
     deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-    deviceContext->DrawIndexedInstanced(36, m_instanceCount, 0, 0, 0);
+    deviceContext->DrawIndexedInstanced(m_Indices.size(), m_instanceCount, 0, 0, 0);
 }
 
 void Model::UpdateInstanceData(const InstanceData& data)
@@ -87,11 +88,12 @@ bool Model::InitializeBuffers(ID3D11Device* device)
     HRESULT hr;
 
     // Load model data
-    std::vector<Vertex> vertices;
-    std::vector<DWORD> indices;
-    ModelLoader::LoadOBJModel("Graphics\\Test.obj", vertices, indices);
+    
+    ModelLoader::LoadModel("Engine\\src\\Graphics\\Cubone.glb", m_Vertices, m_Indices);
+    
+    
 
-    std::cout << "Loaded " << vertices.size() << " vertices and " << indices.size() << " indices.\n";
+    std::cout << "Loaded " << m_Vertices.size() << " vertices and " << m_Indices.size() << " indices.\n";
 
     // Instance buffer setup
     if (m_instanceCount > 0) {
@@ -109,14 +111,14 @@ bool Model::InitializeBuffers(ID3D11Device* device)
 
     // Vertex buffer setup
     D3D11_BUFFER_DESC vertexBufferDesc = {
-        static_cast<UINT>(vertices.size() * sizeof(Vertex)),
+        static_cast<UINT>(m_Vertices.size() * sizeof(Vertex)),
         D3D11_USAGE_DEFAULT,
         D3D11_BIND_VERTEX_BUFFER,
         0,
         0,
         0
     };
-    D3D11_SUBRESOURCE_DATA vertexData = { vertices.data(), 0, 0 };
+    D3D11_SUBRESOURCE_DATA vertexData = { m_Vertices.data(), 0, 0 };
     hr = device->CreateBuffer(&vertexBufferDesc, &vertexData, &m_VertexBuffer);
     if (FAILED(hr)) {
         std::cerr << "Failed to create vertex buffer. HRESULT: " << std::hex << hr << std::endl;
@@ -125,13 +127,13 @@ bool Model::InitializeBuffers(ID3D11Device* device)
 
     // Index buffer setup
     D3D11_BUFFER_DESC indexBufferDesc = {
-        static_cast<UINT>(indices.size() * sizeof(DWORD)),
+        static_cast<UINT>(m_Indices.size() * sizeof(unsigned int)),
         D3D11_USAGE_DEFAULT,
         D3D11_BIND_INDEX_BUFFER,
         0,
         0
     };
-    D3D11_SUBRESOURCE_DATA indexData = { indices.data(), 0, 0 };
+    D3D11_SUBRESOURCE_DATA indexData = { m_Indices.data(), 0, 0 };
     hr = device->CreateBuffer(&indexBufferDesc, &indexData, &m_IndexBuffer);
     if (FAILED(hr)) {
         std::cerr << "Failed to create index buffer. HRESULT: " << std::hex << hr << std::endl;

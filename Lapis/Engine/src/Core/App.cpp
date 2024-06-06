@@ -7,7 +7,6 @@
 #include "Utils/MouseCodes.h"
 #include "Core/Input.h"
 #include "Graphics/Objects/Camera.h"
-#include <assimp/Exporter.hpp>
 
 
 
@@ -61,8 +60,9 @@ bool App::Init()
     m_ImGuiManager = std::make_unique<ImGuiManager>(GraphicsManager::Get().GetDevice(), GraphicsManager::Get().GetDeviceContext(),m_Window->GetWindow());
     
     m_Camera = new Camera(AspectRatio());
-    //model = std::make_shared<Model>(GraphicsManager::Get().GetDevice(), 1);
-    //model->SetScale({ 0.1,0.1,0.1 });
+    model = std::make_shared<Model>(GraphicsManager::Get().GetDevice(), 1);
+    model->SetRotation({ -90,0,0 });
+    model->SetScale({ 2,2,2 });
     // Create cubes
     for (int i = 0; i < 3; ++i) {
         auto cube = std::make_unique<Cube>(GraphicsManager::Get().GetDevice(), 1);
@@ -70,8 +70,11 @@ bool App::Init()
     }
     DirectX::XMFLOAT3 pos1(-3.0f, 0.0f, 0.0f);
     DirectX::XMFLOAT3 pos2(-7.0f, 0.0f, 0.0f);
+    DirectX::XMFLOAT3 pos3(-12.0f, 0.0f, 0.0f);
     m_Cubes[1]->SetPosition(pos1);
     m_Cubes[2]->SetPosition(pos2);
+    m_Cubes[0]->SetPosition(pos3);
+    m_Cubes[0]->SetRotation({90,0,0});
     m_Cubes[1]->canRotate = true;
     m_Cubes[1]->SetTexture("Engine\\src\\Graphics\\Images\\Billy.png");
     m_Cubes[0]->SetTexture("Engine\\src\\Graphics\\Images\\shot.png");
@@ -159,11 +162,12 @@ void App::RenderScene(float deltaTime)
         cube->Render(GraphicsManager::Get().GetDeviceContext());
     }
     InstanceData data;
-    /*data.world = DirectX::XMMatrixTranspose(model->CalculateWorldMatrix());
+    data.world = DirectX::XMMatrixTranspose(model->CalculateWorldMatrix());
     model->Update(deltaTime);
     model->UpdateInstanceData(data);
-    model->Render(GraphicsManager::Get().GetDeviceContext());*/
+    model->Render(GraphicsManager::Get().GetDeviceContext());
     GraphicsManager::Get().UpdateConstantBuffer(viewMatrix, projectionMatrix);
+    GraphicsManager::Get().UpdateMaterialBuffer(GraphicsManager::Get().GetMaterials());
     m_ImGuiManager->Render();
     GraphicsManager::Get().RenderEnd();
 }

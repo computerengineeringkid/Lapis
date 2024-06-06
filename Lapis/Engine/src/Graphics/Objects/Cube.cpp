@@ -102,21 +102,21 @@ bool Cube::InitializeBuffers(ID3D11Device* device)
     
 
     const Vertex vertices[] = {
-        // Back face
-        {{-1.0f, -1.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}},  // Bottom right
-        {{ 1.0f, -1.0f, 1.0f}, {0.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},   // Bottom left
-        {{ 1.0f,  1.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}},    // Top left
-        {{-1.0f,  1.0f, 1.0f}, {0.5f, 0.5f, 0.5f, 1.0f}, {1.0f, 0.0f}},     // Top right
-        // Front face
-        {{-1.0f, -1.0f, -1.0f}, {1.0f, 1.0f, 0.0f, 1.0f}, {0.0f, 1.0f}}, // Bottom left
-        {{1.0f, -1.0f, -1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},  // Bottom right
-        {{1.0f, 1.0f, -1.0f}, {0.0f, 1.0f, 1.0f, 1.0f}, {1.0f, 0.0f}},   // Top right
-        {{-1.0f, 1.0f, -1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}},  // Top left
+    {{-1.0f, -1.0f,  1.0f}, { 0.0f,  0.0f,  1.0f}, {1.0f, 1.0f, 1.0f, 1.0f},  {1.0f, 1.0f}},  // Bottom right
+    {{ 1.0f, -1.0f,  1.0f}, { 0.0f,  0.0f,  1.0f}, {0.0f, 1.0f, 1.0f, 1.0f},  {0.0f, 1.0f}},  // Bottom left
+    {{ 1.0f,  1.0f,  1.0f}, { 0.0f,  0.0f,  1.0f}, {1.0f, 1.0f, 1.0f, 1.0f},  {0.0f, 0.0f}},  // Top left
+    {{-1.0f,  1.0f,  1.0f}, { 0.0f,  0.0f,  1.0f}, {0.5f, 0.5f, 0.5f, 1.0f},  {1.0f, 0.0f}},  // Top right
+    // Front face
+    {{-1.0f, -1.0f, -1.0f}, { 0.0f,  0.0f, -1.0f}, {1.0f, 1.0f, 0.0f, 1.0f},  {0.0f, 1.0f}},  // Bottom left
+    {{ 1.0f, -1.0f, -1.0f}, { 0.0f,  0.0f, -1.0f}, {1.0f, 0.0f, 0.0f, 1.0f},  {1.0f, 1.0f}},  // Bottom right
+    {{ 1.0f,  1.0f, -1.0f}, { 0.0f,  0.0f, -1.0f}, {0.0f, 1.0f, 1.0f, 1.0f},  {1.0f, 0.0f}},  // Top right
+    {{-1.0f,  1.0f, -1.0f}, { 0.0f,  0.0f, -1.0f}, {1.0f, 1.0f, 1.0f, 1.0f},  {0.0f, 0.0f}},  // Top left
 
     };
     unsigned int indices[] = {
     0, 1, 2, 0, 2, 3, // Front face
     4, 6, 5, 4, 7, 6, // Back face
+
     4, 5, 1, 4, 1, 0, // Bottom face
     3, 2, 6, 3, 6, 7, // Top face
     1, 5, 6, 1, 6, 2, // Right face

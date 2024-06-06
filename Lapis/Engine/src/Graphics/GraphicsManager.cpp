@@ -56,6 +56,7 @@ bool GraphicsManager::InitializeDirect3D() {
     }
     pBackBuffer->Release();
     CreateDepthBuffer();
+    CreateMaterialBuffer();
     m_DeviceContext->OMSetRenderTargets(1, m_RenderTargetView.GetAddressOf(), m_DepthStencilView.Get());
     SetViewport((m_ClientWidth),(m_ClientHeight));
     
@@ -143,6 +144,39 @@ void GraphicsManager::CreateConstantBuffer()
     }
 }
 
+void GraphicsManager::CreateMaterialBuffer()
+{
+    D3D11_BUFFER_DESC cbDesc = {};
+    cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    cbDesc.Usage = D3D11_USAGE_DYNAMIC;
+    cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+    cbDesc.ByteWidth = sizeof(DirectX::XMFLOAT4) * 10; // 10 materials
+    cbDesc.MiscFlags = 0;
+
+    HRESULT hr = m_Device->CreateBuffer(&cbDesc, nullptr, &m_MaterialBuffer);
+    if (FAILED(hr))
+    {
+        // Handle error
+        std::cerr << "Failed to create material buffer." << std::endl;
+    }
+}
+void GraphicsManager::UpdateMaterialBuffer(const std::vector<DirectX::XMFLOAT4>& materials)
+{
+    D3D11_MAPPED_SUBRESOURCE mappedResource;
+    HRESULT hr = m_DeviceContext->Map(m_MaterialBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+    if (FAILED(hr))
+    {
+        std::cerr << "Failed to map material buffer." << std::endl;
+        return;
+    }
+
+    memcpy(mappedResource.pData, materials.data(), sizeof(DirectX::XMFLOAT4) * materials.size());
+    m_DeviceContext->Unmap(m_MaterialBuffer.Get(), 0);
+
+    m_DeviceContext->PSSetConstantBuffers(1, 1, m_MaterialBuffer.GetAddressOf());
+}
+
+
 void GraphicsManager::UpdateConstantBuffer(const DirectX::XMMATRIX& viewMatrix, const DirectX::XMMATRIX& projectionMatrix)
 {
     ConstantBuffer cb;
@@ -160,7 +194,7 @@ void GraphicsManager::UpdateConstantBuffer(const DirectX::XMMATRIX& viewMatrix, 
 
 
 void GraphicsManager::RenderBegin() {
-    ClearBuffer(0.0f, 1.0f, 0.0f);
+    ClearBuffer(0.1f, 0.1f, 0.1f);
     
 }
 
