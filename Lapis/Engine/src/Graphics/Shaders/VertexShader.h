@@ -4,14 +4,14 @@
 class VertexShader : public Shader {
 public:
     
-    VertexShader(const std::wstring& filePath) : Shader(filePath) {}
+    VertexShader(const std::wstring& path);
     bool Initialize(ID3D11Device* device, std::string entryPoint = "VS", std::string shaderModel = "vs_5_0") override;
-    bool InitializeWithLayout(ID3D11Device* device, const std::vector<D3D11_INPUT_ELEMENT_DESC>& inputLayout, std::string entryPoint = "VS", std::string shaderModel = "vs_5_0");
+    
     void Bind(ID3D11DeviceContext* deviceContext) override;
+    ID3DBlob* GetBytecode() const;
 
 private:
+    Microsoft::WRL::ComPtr<ID3DBlob> pBytecodeBlob;
     Microsoft::WRL::ComPtr<ID3D11VertexShader> m_VertexShader;
-    Microsoft::WRL::ComPtr<ID3D11InputLayout> m_InputLayout;
-    // Possibly an input layout specific to this shader
 };
 

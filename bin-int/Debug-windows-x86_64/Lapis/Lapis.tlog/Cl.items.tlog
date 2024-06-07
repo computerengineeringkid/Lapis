@@ -16,3 +16,8 @@ C:\Users\WW27H\Desktop\Lapis\Lapis\Engine\src\Graphics\Shaders\Shader.cpp;C:\Use
 C:\Users\WW27H\Desktop\Lapis\Lapis\Engine\src\Graphics\Shaders\VertexShader.cpp;C:\Users\WW27H\Desktop\Lapis\bin-int\Debug-windows-x86_64\Lapis\VertexShader.obj
 C:\Users\WW27H\Desktop\Lapis\Lapis\Engine\src\Graphics\Surface.cpp;C:\Users\WW27H\Desktop\Lapis\bin-int\Debug-windows-x86_64\Lapis\Surface.obj
 C:\Users\WW27H\Desktop\Lapis\Lapis\Engine\src\Graphics\Texture.cpp;C:\Users\WW27H\Desktop\Lapis\bin-int\Debug-windows-x86_64\Lapis\Texture.obj
+C:\Users\WW27H\Desktop\Lapis\Lapis\Engine\src\Graphics\Buffers\IndexBuffer.cpp;C:\Users\WW27H\Desktop\Lapis\bin-int\Debug-windows-x86_64\Lapis\IndexBuffer.obj
+C:\Users\WW27H\Desktop\Lapis\Lapis\Engine\src\Graphics\Buffers\InputLayout.cpp;C:\Users\WW27H\Desktop\Lapis\bin-int\Debug-windows-x86_64\Lapis\InputLayout.obj
+C:\Users\WW27H\Desktop\Lapis\Lapis\Engine\src\Graphics\Buffers\Topology.cpp;C:\Users\WW27H\Desktop\Lapis\bin-int\Debug-windows-x86_64\Lapis\Topology.obj
+C:\Users\WW27H\Desktop\Lapis\Lapis\Engine\src\Graphics\Buffers\VertexBuffer.cpp;C:\Users\WW27H\Desktop\Lapis\bin-int\Debug-windows-x86_64\Lapis\VertexBuffer.obj
+C:\Users\WW27H\Desktop\Lapis\Lapis\Engine\src\Graphics\Buffers\InstanceBuffer.cpp;C:\Users\WW27H\Desktop\Lapis\bin-int\Debug-windows-x86_64\Lapis\InstanceBuffer.obj

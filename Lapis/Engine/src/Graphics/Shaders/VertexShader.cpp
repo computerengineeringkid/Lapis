@@ -34,41 +34,39 @@ bool VertexShader::Initialize(ID3D11Device* device, std::string entryPoint, std:
         {"INSTANCEWORLD", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 48, D3D11_INPUT_PER_INSTANCE_DATA, 1}
 
     };
-    ;
-    InitializeWithLayout(device, std::vector<D3D11_INPUT_ELEMENT_DESC>());
+    
+   
+   // hr = D3DReadFileToBlob(L"VertexShader.vs.cso", &pBlob);
 
-    device->CreateInputLayout(
-        ied, (UINT)std::size(ied),
-        pBlob->GetBufferPointer(),
-        pBlob->GetBufferSize(),
-        &m_InputLayout
+    
+}
+
+
+
+VertexShader::VertexShader( const std::wstring& path)
+    : Shader(path)
+{
+    
+
+    D3DReadFileToBlob(path.c_str(), &pBytecodeBlob);
+   GraphicsManager::Get().GetDevice()->CreateVertexShader(
+        pBytecodeBlob->GetBufferPointer(),
+        pBytecodeBlob->GetBufferSize(),
+        nullptr,
+        &m_VertexShader
     );
 }
 
-bool VertexShader::InitializeWithLayout(ID3D11Device* device, const std::vector<D3D11_INPUT_ELEMENT_DESC>& inputLayout, std::string entryPoint, std::string shaderModel)
+
+
+ID3DBlob* VertexShader::GetBytecode() const
 {
-    if (!inputLayout.size() > 0)
-        return false;
-
-    HRESULT hr;
-    Microsoft::WRL::ComPtr<ID3DBlob> pBlob;
-    hr = D3DReadFileToBlob(L"VertexShader.vs.cso", &pBlob);
-
-    device->CreateInputLayout(
-        inputLayout.data(), (UINT)std::size(inputLayout),
-        pBlob->GetBufferPointer(),
-        pBlob->GetBufferSize(),
-        &m_InputLayout
-    );
-    GraphicsManager::Get().GetDeviceContext()->IASetInputLayout(m_InputLayout.Get());
-    return true;
-	
-    
+    return pBytecodeBlob.Get();
 }
 
 void VertexShader::Bind(ID3D11DeviceContext* deviceContext)
 {
-    deviceContext->IASetInputLayout(m_InputLayout.Get());
     deviceContext->VSSetShader(m_VertexShader.Get(), nullptr, 0);
 
 }
+

@@ -60,9 +60,9 @@ bool App::Init()
     m_ImGuiManager = std::make_unique<ImGuiManager>(GraphicsManager::Get().GetDevice(), GraphicsManager::Get().GetDeviceContext(),m_Window->GetWindow());
     
     m_Camera = new Camera(AspectRatio());
-    model = std::make_shared<Model>(GraphicsManager::Get().GetDevice(), 1);
+    /*model = std::make_shared<Model>(GraphicsManager::Get().GetDevice(), 1);
     model->SetRotation({ -90,0,0 });
-    model->SetScale({ 2,2,2 });
+    model->SetScale({ 2,2,2 });*/
     // Create cubes
     for (int i = 0; i < 3; ++i) {
         auto cube = std::make_unique<Cube>(GraphicsManager::Get().GetDevice(), 1);
@@ -161,13 +161,13 @@ void App::RenderScene(float deltaTime)
         // Render the cube
         cube->Render(GraphicsManager::Get().GetDeviceContext());
     }
-    InstanceData data;
+    /*InstanceData data;
     data.world = DirectX::XMMatrixTranspose(model->CalculateWorldMatrix());
     model->Update(deltaTime);
     model->UpdateInstanceData(data);
-    model->Render(GraphicsManager::Get().GetDeviceContext());
+    model->Render(GraphicsManager::Get().GetDeviceContext());*/
     GraphicsManager::Get().UpdateConstantBuffer(viewMatrix, projectionMatrix);
-    GraphicsManager::Get().UpdateMaterialBuffer(GraphicsManager::Get().GetMaterials());
+    //GraphicsManager::Get().UpdateMaterialBuffer(GraphicsManager::Get().GetMaterials());
     m_ImGuiManager->Render();
     GraphicsManager::Get().RenderEnd();
 }

@@ -81,6 +81,11 @@
     <ClInclude Include="Engine\src\Utils\Timer.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\src\Graphics\Buffers\VertexBuffer.h" />
+    <ClInclude Include="Engine\src\Graphics\Buffers\IndexBuffer.h" />
+    <ClInclude Include="Engine\src\Graphics\Buffers\InputLayout.h" />
+    <ClInclude Include="Engine\src\Graphics\Buffers\Topology.h" />
+    <ClInclude Include="Engine\src\Graphics\Buffers\InstanceBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\src\Core\App.cpp">
@@ -137,6 +142,11 @@
     <ClCompile Include="Engine\src\Graphics\Texture.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\src\Graphics\Buffers\VertexBuffer.cpp" />
+    <ClCompile Include="Engine\src\Graphics\Buffers\IndexBuffer.cpp" />
+    <ClCompile Include="Engine\src\Graphics\Buffers\InputLayout.cpp" />
+    <ClCompile Include="Engine\src\Graphics\Buffers\Topology.cpp" />
+    <ClCompile Include="Engine\src\Graphics\Buffers\InstanceBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Engine\src\Graphics\Shaders\PixelShader.ps.hlsl">
