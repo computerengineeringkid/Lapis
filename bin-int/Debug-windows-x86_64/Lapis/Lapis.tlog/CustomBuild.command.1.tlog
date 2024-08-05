@@ -1,4 +1,4 @@
-^C:\USERS\WW27H\DESKTOP\LAPIS\LAPIS\ENGINE\SRC\GRAPHICS\SHADERS\PIXELSHADER.PS.HLSL
-fxc /T ps_5_0 /E "main" /Fo "C:\Users\WW27H\Desktop\Lapis\/Lapis/PixelShader.ps.cso" "Engine\src\Graphics\Shaders\PixelShader.ps.hlsl"
-^C:\USERS\WW27H\DESKTOP\LAPIS\LAPIS\ENGINE\SRC\GRAPHICS\SHADERS\VERTEXSHADER.VS.HLSL
-fxc /T vs_5_0 /E "main" /Fo "C:\Users\WW27H\Desktop\Lapis\/Lapis/VertexShader.vs.cso" "Engine\src\Graphics\Shaders\VertexShader.vs.hlsl"
+^C:\LAPIS\LAPIS\ENGINE\SRC\GRAPHICS\SHADERS\PIXELSHADER.PS.HLSL
+fxc /T ps_5_0 /E "main" /Fo "C:\Lapis\/Lapis/PixelShader.ps.cso" "Engine\src\Graphics\Shaders\PixelShader.ps.hlsl"
+^C:\LAPIS\LAPIS\ENGINE\SRC\GRAPHICS\SHADERS\VERTEXSHADER.VS.HLSL
+fxc /T vs_5_0 /E "main" /Fo "C:\Lapis\/Lapis/VertexShader.vs.cso" "Engine\src\Graphics\Shaders\VertexShader.vs.hlsl"

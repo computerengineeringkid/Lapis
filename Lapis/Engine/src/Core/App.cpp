@@ -60,24 +60,24 @@ bool App::Init()
     m_ImGuiManager = std::make_unique<ImGuiManager>(GraphicsManager::Get().GetDevice(), GraphicsManager::Get().GetDeviceContext(),m_Window->GetWindow());
     
     m_Camera = new Camera(AspectRatio());
-    /*model = std::make_shared<Model>(GraphicsManager::Get().GetDevice(), 1);
+    model = std::make_shared<Model>(GraphicsManager::Get().GetDevice(), 1);
     model->SetRotation({ -90,0,0 });
-    model->SetScale({ 2,2,2 });*/
+    model->SetScale({ 1,1,1});
     // Create cubes
     for (int i = 0; i < 3; ++i) {
         auto cube = std::make_unique<Cube>(GraphicsManager::Get().GetDevice(), 1);
         m_Cubes.push_back(std::move(cube));
     }
-    DirectX::XMFLOAT3 pos1(-3.0f, 0.0f, 0.0f);
+    DirectX::XMFLOAT3 pos1(-3.0f, 0.0f, 5.0f);
     DirectX::XMFLOAT3 pos2(-7.0f, 0.0f, 0.0f);
     DirectX::XMFLOAT3 pos3(-12.0f, 0.0f, 0.0f);
     m_Cubes[1]->SetPosition(pos1);
     m_Cubes[2]->SetPosition(pos2);
     m_Cubes[0]->SetPosition(pos3);
-    m_Cubes[0]->SetRotation({90,0,0});
-    m_Cubes[1]->canRotate = true;
+    m_Cubes[0]->SetRotation({80,80,30});
     m_Cubes[1]->SetTexture("Engine\\src\\Graphics\\Images\\Billy.png");
     m_Cubes[0]->SetTexture("Engine\\src\\Graphics\\Images\\shot.png");
+    m_Cubes[0]->canRotate = true;
     m_Timer.Start();
     
     return true;
@@ -136,6 +136,15 @@ bool App::ProcessMessages()
     io.KeyShift = Input::IsKeyDown(LAPIS_SHIFT);
     io.KeyAlt = Input::IsKeyDown(LAPIS_ALT);
 
+    if (Input::IsKeyDown(LAPIS_KEY_I))
+    {
+        GraphicsManager::Get().GetDeviceContext()->RSSetState(GraphicsManager::Get().GetWireFrameRS().Get());
+    }
+    if (Input::IsKeyDown(LAPIS_KEY_O))
+    {
+        GraphicsManager::Get().GetDeviceContext()->RSSetState(GraphicsManager::Get().GetSolidRS().Get());
+    }
+
     return true;
 }
 
@@ -150,10 +159,30 @@ void App::RenderScene(float deltaTime)
 
     // Update each cube's instance data and render
     for (auto& cube : m_Cubes) {
-        InstanceData data; 
+        InstanceData data;
         data.world = DirectX::XMMatrixTranspose(cube->CalculateWorldMatrix());  // Ensure CalculateWorldMatrix exists and returns the correct matrix
 
         cube->Update(deltaTime);
+        
+        // Get the current position of the cube
+        DirectX::XMFLOAT3 pos = m_Cubes[1]->GetPosition();
+
+        // Create an offset vector
+        DirectX::XMFLOAT3 offset = { 0.001f, 0.001f, 0.001f };
+
+        // Convert the XMFLOAT3 to XMVECTOR for addition
+        DirectX::XMVECTOR posVec = DirectX::XMLoadFloat3(&pos);
+        DirectX::XMVECTOR offsetVec = DirectX::XMLoadFloat3(&offset);
+
+        // Add the vectors
+        DirectX::XMVECTOR resultVec = DirectX::XMVectorAdd(posVec, offsetVec);
+
+        // Store the result back into an XMFLOAT3
+        DirectX::XMFLOAT3 resultPos;
+        DirectX::XMStoreFloat3(&resultPos, resultVec);
+
+        // Set the new position of the cube
+        m_Cubes[1]->SetPosition(resultPos);
         cube->UpdateInstanceData(data);  // Update instance data for each cube
 
         // Update the constant buffer
@@ -161,11 +190,11 @@ void App::RenderScene(float deltaTime)
         // Render the cube
         cube->Render(GraphicsManager::Get().GetDeviceContext());
     }
-    /*InstanceData data;
+    InstanceData data;
     data.world = DirectX::XMMatrixTranspose(model->CalculateWorldMatrix());
     model->Update(deltaTime);
     model->UpdateInstanceData(data);
-    model->Render(GraphicsManager::Get().GetDeviceContext());*/
+    model->Render(GraphicsManager::Get().GetDeviceContext());
     GraphicsManager::Get().UpdateConstantBuffer(viewMatrix, projectionMatrix);
     //GraphicsManager::Get().UpdateMaterialBuffer(GraphicsManager::Get().GetMaterials());
     m_ImGuiManager->Render();

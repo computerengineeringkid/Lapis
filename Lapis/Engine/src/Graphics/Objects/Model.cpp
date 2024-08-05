@@ -5,26 +5,28 @@
 #include "Graphics/Sampler.h"
 #include "Graphics/Surface.h"
 #include "Graphics/ModelLoader.h"
+#include "Graphics/Buffers/IndexBuffer.h"
+#include "Graphics/Buffers/VertexBuffer.h"
+#include "Graphics/Buffers/InstanceBuffer.h"
+#include "Graphics/Buffers/Topology.h"
+#include "Graphics/Buffers/InputLayout.h"
 
 
 Model::Model(ID3D11Device* device, int instanceCount)
     :m_instanceCount(instanceCount)
-
 {
+    m_VertexShader = std::make_shared<VertexShader>(L"VertexShader.vs.cso");
+    m_PixelShader = std::make_shared<PixelShader>(L"PixelShader.ps.cso");
     
-    m_VertexShader = std::make_shared<VertexShader>(L"d");
-    m_PixelShader = std::make_shared<PixelShader>(L"d");
+    
+    ModelLoader::LoadModel("Engine\\src\\Graphics\\monkey.glb", m_Vertices, m_Indices);
+    m_VertexBuffer = std::make_shared<VertexBuffer>(m_Vertices);
+    m_IndexBuffer = std::make_shared<IndexBuffer>(m_Indices);
+    m_InstanceBuffer = std::make_shared<InstanceBuffer>(m_instanceCount);
 
 
-    if (!m_VertexShader->Initialize(device)) {
-        // Handle errors
-    }
-    if (!m_PixelShader->Initialize(device)) {
-        // Handle errors
-    }
-    if (!InitializeBuffers(device)) {
-        std::cerr << "Error: Failed to initialize buffers." << std::endl;
-    }
+   
+
 }
 
 Model::~Model()
@@ -47,6 +49,7 @@ void Model::Render(ID3D11DeviceContext* deviceContext)
     m_VertexShader->Bind(deviceContext);
     m_PixelShader->Bind(deviceContext);
 
+    m_IndexBuffer->Bind();
     if (m_Texture)
     {
         m_Texture->Bind();
@@ -56,11 +59,34 @@ void Model::Render(ID3D11DeviceContext* deviceContext)
 
     unsigned int strides[2] = { sizeof(Vertex), sizeof(InstanceData) };
     unsigned int offsets[2] = { 0, 0 };
-    ID3D11Buffer* buffers[2] = { m_VertexBuffer.Get(), m_InstanceBuffer.Get() };
+    ID3D11Buffer* buffers[2] = { m_VertexBuffer->GetVertexBuffer().Get(), m_InstanceBuffer->GetInstanceBuffer().Get() };
 
+    //m_VertexBuffer->Bind();
+    const std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
+    {
+        {"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+        {"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
+        {"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0},
+        {"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 40, D3D11_INPUT_PER_VERTEX_DATA, 0},
+        {"MATERIALINDEX", 0, DXGI_FORMAT_R32_UINT, 0, 48, D3D11_INPUT_PER_VERTEX_DATA, 0},
+
+
+
+        {"INSTANCEWORLD", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 0, D3D11_INPUT_PER_INSTANCE_DATA, 1},
+        {"INSTANCEWORLD", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 16, D3D11_INPUT_PER_INSTANCE_DATA, 1},
+        {"INSTANCEWORLD", 2, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 32, D3D11_INPUT_PER_INSTANCE_DATA, 1},
+        {"INSTANCEWORLD", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 48, D3D11_INPUT_PER_INSTANCE_DATA, 1}
+
+    };
+    auto top = std::make_shared<Topology>(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    auto Input = std::make_shared<InputLayout>(ied, m_VertexShader->GetBytecode());
+    top->Bind();
+    Input->Bind();
     deviceContext->IASetVertexBuffers(0, 2, buffers, strides, offsets);
-    deviceContext->IASetIndexBuffer(m_IndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
-    deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    //deviceContext->IASetIndexBuffer(m_IndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+    //deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    
+    
     deviceContext->DrawIndexedInstanced(m_Indices.size(), m_instanceCount, 0, 0, 0);
 }
 
@@ -70,9 +96,9 @@ void Model::UpdateInstanceData(const InstanceData& data)
         D3D11_MAPPED_SUBRESOURCE mappedResource;
         ZeroMemory(&mappedResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
         auto deviceContext = GraphicsManager::Get().GetDeviceContext();
-        deviceContext->Map(m_InstanceBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+        deviceContext->Map(m_InstanceBuffer->GetInstanceBuffer().Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
         memcpy(mappedResource.pData, &data, sizeof(InstanceData));
-        deviceContext->Unmap(m_InstanceBuffer.Get(), 0);
+        deviceContext->Unmap(m_InstanceBuffer->GetInstanceBuffer().Get(), 0);
     }
 }
 
@@ -85,60 +111,55 @@ void Model::SetTexture(const std::string& path)
 
 bool Model::InitializeBuffers(ID3D11Device* device)
 {
-    HRESULT hr;
+    //HRESULT hr;
+    //// Instance buffer setup
+    //if (m_instanceCount > 0) {
+    //    D3D11_BUFFER_DESC instanceBufferDesc = {};
+    //    instanceBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+    //    instanceBufferDesc.ByteWidth = sizeof(InstanceData) * m_instanceCount;
+    //    instanceBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+    //    instanceBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
-    // Load model data
-    
-    ModelLoader::LoadModel("Engine\\src\\Graphics\\Cubone.glb", m_Vertices, m_Indices);
-    
-    
+    //    hr = device->CreateBuffer(&instanceBufferDesc, nullptr, m_InstanceBuffer.GetAddressOf());
+    //    if (FAILED(hr)) {
+    //        std::cerr << "Failed to create instance buffer. HRESULT: " << std::hex << hr << std::endl;
+    //        return false;
+    //    }
+    //}
 
-    std::cout << "Loaded " << m_Vertices.size() << " vertices and " << m_Indices.size() << " indices.\n";
+    //
 
-    // Instance buffer setup
-    if (m_instanceCount > 0) {
-        D3D11_BUFFER_DESC instanceBufferDesc = {};
-        instanceBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-        instanceBufferDesc.ByteWidth = sizeof(InstanceData) * m_instanceCount;
-        instanceBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-        instanceBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-        hr = device->CreateBuffer(&instanceBufferDesc, nullptr, &m_InstanceBuffer);
-        if (FAILED(hr)) {
-            std::cerr << "Failed to create instance buffer. HRESULT: " << std::hex << hr << std::endl;
-            return false;
-        }
-    }
+    //
+    //D3D11_BUFFER_DESC vertexBufferDesc = {
+    //   sizeof(vertices),
+    //   D3D11_USAGE_DEFAULT,
+    //   D3D11_BIND_VERTEX_BUFFER,
+    //   0,
+    //   0,
+    //   sizeof(Vertex)
+    //};
+    //D3D11_SUBRESOURCE_DATA vertexData = { vertices, 0, 0 };
 
-    // Vertex buffer setup
-    D3D11_BUFFER_DESC vertexBufferDesc = {
-        static_cast<UINT>(m_Vertices.size() * sizeof(Vertex)),
-        D3D11_USAGE_DEFAULT,
-        D3D11_BIND_VERTEX_BUFFER,
-        0,
-        0,
-        0
-    };
-    D3D11_SUBRESOURCE_DATA vertexData = { m_Vertices.data(), 0, 0 };
-    hr = device->CreateBuffer(&vertexBufferDesc, &vertexData, &m_VertexBuffer);
-    if (FAILED(hr)) {
-        std::cerr << "Failed to create vertex buffer. HRESULT: " << std::hex << hr << std::endl;
-        return false;
-    }
+    //hr = device->CreateBuffer(&vertexBufferDesc, &vertexData, m_VertexBuffer.GetAddressOf());
+    //if (FAILED(hr)) {
+    //    std::cerr << "Failed to create vertex buffer. HRESULT: " << std::hex << hr << std::endl;
+    //    return false;
+    //}
+    //
+    //D3D11_BUFFER_DESC indexBufferDesc = {
+    //    sizeof(indices),
+    //    D3D11_USAGE_DEFAULT,
+    //    D3D11_BIND_INDEX_BUFFER,
+    //    0,
+    //    0
+    //};
+    //D3D11_SUBRESOURCE_DATA indexData = { indices, 0, 0 };
 
-    // Index buffer setup
-    D3D11_BUFFER_DESC indexBufferDesc = {
-        static_cast<UINT>(m_Indices.size() * sizeof(unsigned int)),
-        D3D11_USAGE_DEFAULT,
-        D3D11_BIND_INDEX_BUFFER,
-        0,
-        0
-    };
-    D3D11_SUBRESOURCE_DATA indexData = { m_Indices.data(), 0, 0 };
-    hr = device->CreateBuffer(&indexBufferDesc, &indexData, &m_IndexBuffer);
-    if (FAILED(hr)) {
-        std::cerr << "Failed to create index buffer. HRESULT: " << std::hex << hr << std::endl;
-        return false;
-    }
+    //hr = device->CreateBuffer(&indexBufferDesc, &indexData, m_IndexBuffer.GetAddressOf());
+    //if (FAILED(hr)) {
+    //    std::cerr << "Failed to create index buffer. HRESULT: " << std::hex << hr << std::endl;
+    //    return false;
+    //}
 
     return true;
 

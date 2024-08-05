@@ -26,7 +26,7 @@ void Camera::SetProjectionMatrix(float aspectRatio)
 void Camera::ProcessInput(float deltaTime)
 {
     const float speed = 10.0f *deltaTime;
-    const float rotationSpeed = 90.0f * deltaTime;
+    const float rotationSpeed = 180.0f * deltaTime;
     DirectX::XMVECTOR forward = DirectX::XMVectorSet(0.0f, 0.0f, -speed, 0.0f);
     DirectX::XMVECTOR backward = DirectX::XMVectorSet(0.0f, 0.0f, speed, 0.0f);
     DirectX::XMVECTOR right = DirectX::XMVectorSet(speed, 0.0f, 0.0f, 0.0f);

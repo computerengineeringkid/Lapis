@@ -143,6 +143,11 @@
     <ClInclude Include="Engine\src\Core\App.h" />
     <ClInclude Include="Engine\src\Core\Input.h" />
     <ClInclude Include="Engine\src\Core\Window.h" />
+    <ClInclude Include="Engine\src\Graphics\Buffers\IndexBuffer.h" />
+    <ClInclude Include="Engine\src\Graphics\Buffers\InputLayout.h" />
+    <ClInclude Include="Engine\src\Graphics\Buffers\InstanceBuffer.h" />
+    <ClInclude Include="Engine\src\Graphics\Buffers\Topology.h" />
+    <ClInclude Include="Engine\src\Graphics\Buffers\VertexBuffer.h" />
     <ClInclude Include="Engine\src\Graphics\GDIPlusManager.h" />
     <ClInclude Include="Engine\src\Graphics\GraphicsManager.h" />
     <ClInclude Include="Engine\src\Graphics\ImGui\ImGuiManager.h" />
@@ -160,17 +165,17 @@
     <ClInclude Include="Engine\src\Utils\KeyCodes.h" />
     <ClInclude Include="Engine\src\Utils\MouseCodes.h" />
     <ClInclude Include="Engine\src\Utils\Timer.h" />
-    <ClInclude Include="Engine\src\Graphics\Buffers\IndexBuffer.h" />
-    <ClInclude Include="Engine\src\Graphics\Buffers\InputLayout.h" />
-    <ClInclude Include="Engine\src\Graphics\Buffers\Topology.h" />
-    <ClInclude Include="Engine\src\Graphics\Buffers\VertexBuffer.h" />
-    <ClInclude Include="Engine\src\Graphics\Buffers\InstanceBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\src\Core\App.cpp" />
     <ClCompile Include="Engine\src\Core\Entry.cpp" />
     <ClCompile Include="Engine\src\Core\Input.cpp" />
     <ClCompile Include="Engine\src\Core\Window.cpp" />
+    <ClCompile Include="Engine\src\Graphics\Buffers\IndexBuffer.cpp" />
+    <ClCompile Include="Engine\src\Graphics\Buffers\InputLayout.cpp" />
+    <ClCompile Include="Engine\src\Graphics\Buffers\InstanceBuffer.cpp" />
+    <ClCompile Include="Engine\src\Graphics\Buffers\Topology.cpp" />
+    <ClCompile Include="Engine\src\Graphics\Buffers\VertexBuffer.cpp" />
     <ClCompile Include="Engine\src\Graphics\GDIPlusManager.cpp" />
     <ClCompile Include="Engine\src\Graphics\GraphicsManager.cpp" />
     <ClCompile Include="Engine\src\Graphics\ImGui\ImGuiManager.cpp" />
@@ -185,11 +190,6 @@
     <ClCompile Include="Engine\src\Graphics\Shaders\VertexShader.cpp" />
     <ClCompile Include="Engine\src\Graphics\Surface.cpp" />
     <ClCompile Include="Engine\src\Graphics\Texture.cpp" />
-    <ClCompile Include="Engine\src\Graphics\Buffers\IndexBuffer.cpp" />
-    <ClCompile Include="Engine\src\Graphics\Buffers\InputLayout.cpp" />
-    <ClCompile Include="Engine\src\Graphics\Buffers\Topology.cpp" />
-    <ClCompile Include="Engine\src\Graphics\Buffers\VertexBuffer.cpp" />
-    <ClCompile Include="Engine\src\Graphics\Buffers\InstanceBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Engine\src\Graphics\Shaders\PixelShader.ps.hlsl">

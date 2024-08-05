@@ -7,6 +7,9 @@
     <Filter Include="Graphics">
       <UniqueIdentifier>{1653CE33-0220-293F-2B39-17E717655ECD}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\Buffers">
+      <UniqueIdentifier>{92C817CE-7EC1-3620-A7F3-1BA5934B162C}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Graphics\ImGui">
       <UniqueIdentifier>{C0408A88-AC0E-7E8E-95A2-EEB4810F5AF3}</UniqueIdentifier>
     </Filter>
@@ -29,6 +32,21 @@
     </ClInclude>
     <ClInclude Include="Engine\src\Core\Window.h">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\Graphics\Buffers\IndexBuffer.h">
+      <Filter>Graphics\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\Graphics\Buffers\InputLayout.h">
+      <Filter>Graphics\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\Graphics\Buffers\InstanceBuffer.h">
+      <Filter>Graphics\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\Graphics\Buffers\Topology.h">
+      <Filter>Graphics\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\Graphics\Buffers\VertexBuffer.h">
+      <Filter>Graphics\Buffers</Filter>
     </ClInclude>
     <ClInclude Include="Engine\src\Graphics\GDIPlusManager.h">
       <Filter>Graphics</Filter>
@@ -81,11 +99,6 @@
     <ClInclude Include="Engine\src\Utils\Timer.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\src\Graphics\Buffers\VertexBuffer.h" />
-    <ClInclude Include="Engine\src\Graphics\Buffers\IndexBuffer.h" />
-    <ClInclude Include="Engine\src\Graphics\Buffers\InputLayout.h" />
-    <ClInclude Include="Engine\src\Graphics\Buffers\Topology.h" />
-    <ClInclude Include="Engine\src\Graphics\Buffers\InstanceBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\src\Core\App.cpp">
@@ -99,6 +112,21 @@
     </ClCompile>
     <ClCompile Include="Engine\src\Core\Window.cpp">
       <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Graphics\Buffers\IndexBuffer.cpp">
+      <Filter>Graphics\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Graphics\Buffers\InputLayout.cpp">
+      <Filter>Graphics\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Graphics\Buffers\InstanceBuffer.cpp">
+      <Filter>Graphics\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Graphics\Buffers\Topology.cpp">
+      <Filter>Graphics\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Graphics\Buffers\VertexBuffer.cpp">
+      <Filter>Graphics\Buffers</Filter>
     </ClCompile>
     <ClCompile Include="Engine\src\Graphics\GDIPlusManager.cpp">
       <Filter>Graphics</Filter>
@@ -142,11 +170,6 @@
     <ClCompile Include="Engine\src\Graphics\Texture.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\src\Graphics\Buffers\VertexBuffer.cpp" />
-    <ClCompile Include="Engine\src\Graphics\Buffers\IndexBuffer.cpp" />
-    <ClCompile Include="Engine\src\Graphics\Buffers\InputLayout.cpp" />
-    <ClCompile Include="Engine\src\Graphics\Buffers\Topology.cpp" />
-    <ClCompile Include="Engine\src\Graphics\Buffers\InstanceBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Engine\src\Graphics\Shaders\PixelShader.ps.hlsl">

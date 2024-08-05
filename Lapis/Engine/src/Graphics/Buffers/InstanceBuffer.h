@@ -4,9 +4,10 @@
 class InstanceBuffer
 {
 public:
-	InstanceBuffer();
+	InstanceBuffer(int count);
 
 	void UpdateBuffer();
+	Microsoft::WRL::ComPtr<ID3D11Buffer>& GetInstanceBuffer() { return m_InstanceBuffer; }
 protected:
 	int m_InstanceCount;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> m_InstanceBuffer; // Buffer for instance data

@@ -57,6 +57,7 @@ bool GraphicsManager::InitializeDirect3D() {
     pBackBuffer->Release();
     CreateDepthBuffer();
     CreateMaterialBuffer();
+    InitializeRasterizer();
     m_DeviceContext->OMSetRenderTargets(1, m_RenderTargetView.GetAddressOf(), m_DepthStencilView.Get());
     SetViewport((m_ClientWidth),(m_ClientHeight));
     
@@ -174,6 +175,26 @@ void GraphicsManager::UpdateMaterialBuffer(const std::vector<DirectX::XMFLOAT4>&
     m_DeviceContext->Unmap(m_MaterialBuffer.Get(), 0);
 
     m_DeviceContext->PSSetConstantBuffers(1, 1, m_MaterialBuffer.GetAddressOf());
+}
+
+void GraphicsManager::InitializeRasterizer()
+{
+    D3D11_RASTERIZER_DESC wsDesc;
+    ZeroMemory(&wsDesc, sizeof(D3D11_RASTERIZER_DESC));
+    wsDesc.FillMode = D3D11_FILL_WIREFRAME;
+    wsDesc.CullMode = D3D11_CULL_NONE;
+    wsDesc.FrontCounterClockwise = true;
+    wsDesc.DepthClipEnable = true;
+    m_Device->CreateRasterizerState(&wsDesc, &m_WireframeRS);
+
+    D3D11_RASTERIZER_DESC ssDesc;
+    ZeroMemory(&wsDesc, sizeof(D3D11_RASTERIZER_DESC));
+    ssDesc.FillMode = D3D11_FILL_SOLID;
+    ssDesc.CullMode = D3D11_CULL_BACK;
+    
+    ssDesc.FrontCounterClockwise = true;
+    ssDesc.DepthClipEnable = true;
+    m_Device->CreateRasterizerState(&wsDesc, &m_SolidRS);
 }
 
 

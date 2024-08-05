@@ -6,8 +6,10 @@
 #include "Graphics/Surface.h"
 #include "Graphics/Buffers/IndexBuffer.h"
 #include "Graphics/Buffers/VertexBuffer.h"
+#include "Graphics/Buffers/InstanceBuffer.h"
 #include "Graphics/Buffers/Topology.h"
 #include "Graphics/Buffers/InputLayout.h"
+
 
 Cube::Cube(ID3D11Device* device, int instanceCount)
     :m_instanceCount(instanceCount)
@@ -39,20 +41,8 @@ Cube::Cube(ID3D11Device* device, int instanceCount)
     };
     m_VertexBuffer = std::make_shared<VertexBuffer>(vertices);
     m_IndexBuffer = std::make_shared<IndexBuffer>(indices);
-
-    if (m_instanceCount > 0) {
-        D3D11_BUFFER_DESC instanceBufferDesc = {};
-        instanceBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-        instanceBufferDesc.ByteWidth = sizeof(InstanceData) * m_instanceCount;
-        instanceBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-        instanceBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-
-        HRESULT hr = device->CreateBuffer(&instanceBufferDesc, nullptr, m_InstanceBuffer.GetAddressOf());
-        if (FAILED(hr)) {
-            std::cerr << "Failed to create instance buffer. HRESULT: " << std::hex << hr << std::endl;
-
-        }
-    }
+    m_InstanceBuffer = std::make_shared<InstanceBuffer>(m_instanceCount);
+    
 
    
    /* if (!InitializeBuffers(device)) {
@@ -91,9 +81,9 @@ void Cube::Render(ID3D11DeviceContext* deviceContext)
 
     unsigned int strides[2] = { sizeof(Vertex), sizeof(InstanceData) };
     unsigned int offsets[2] = { 0, 0 };
-    ID3D11Buffer* buffers[2] = { m_VertexBuffer->GetVertexBuffer().Get(), m_InstanceBuffer.Get()};
+    ID3D11Buffer* buffers[2] = { m_VertexBuffer->GetVertexBuffer().Get(), m_InstanceBuffer->GetInstanceBuffer().Get()};
 
-    m_VertexBuffer->Bind();
+    //m_VertexBuffer->Bind();
     m_IndexBuffer->Bind();
     const std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
     {
@@ -127,9 +117,9 @@ void Cube::UpdateInstanceData(const InstanceData& data)
         D3D11_MAPPED_SUBRESOURCE mappedResource;
         ZeroMemory(&mappedResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
         auto deviceContext = GraphicsManager::Get().GetDeviceContext();
-        deviceContext->Map(m_InstanceBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+        deviceContext->Map(m_InstanceBuffer->GetInstanceBuffer().Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
         memcpy(mappedResource.pData, &data, sizeof(InstanceData));
-        deviceContext->Unmap(m_InstanceBuffer.Get(), 0);
+        deviceContext->Unmap(m_InstanceBuffer->GetInstanceBuffer().Get(), 0);
     }
 }
 

@@ -12,9 +12,9 @@ struct aiMesh;
 class ModelLoader
 {
 public:
-    static void LoadModel(const std::string& path, std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
+    static void LoadModel(const std::string& path, std::vector<Vertex>& vertices, std::vector<unsigned short>& indices);
 
 private:
-    static void ProcessNode(aiNode* node, const aiScene* scene, std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
-    static void ProcessMesh(aiMesh* mesh, const aiScene* scene, std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
+    static void ProcessNode(aiNode* node, const aiScene* scene, std::vector<Vertex>& vertices, std::vector<unsigned short>& indices);
+    static void ProcessMesh(aiMesh* mesh, const aiScene* scene, std::vector<Vertex>& vertices, std::vector<unsigned short>& indices);
 };

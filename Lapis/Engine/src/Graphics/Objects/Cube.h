@@ -28,7 +28,7 @@ public:
 private:
     std::shared_ptr<class VertexBuffer> m_VertexBuffer;
     std::shared_ptr<class IndexBuffer> m_IndexBuffer;
-    Microsoft::WRL::ComPtr<ID3D11Buffer> m_InstanceBuffer; // Buffer for instance data
+    std::shared_ptr<class InstanceBuffer> m_InstanceBuffer; // Buffer for instance data
     std::shared_ptr<VertexShader> m_VertexShader;
     std::shared_ptr<PixelShader> m_PixelShader;
     std::shared_ptr<class Texture> m_Texture;

@@ -2,9 +2,10 @@
 #include "Graphics/GraphicsManager.h"
 #include <iostream>
 #include "Graphics/Objects/GameObject.h"
-InstanceBuffer::InstanceBuffer()
+InstanceBuffer::InstanceBuffer(int count)
+    :m_InstanceCount(count)
 {
-    if (m_InstanceCount > 0) {
+    
         D3D11_BUFFER_DESC instanceBufferDesc = {};
         instanceBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
         instanceBufferDesc.ByteWidth = sizeof(InstanceData) * m_InstanceCount;
@@ -16,7 +17,7 @@ InstanceBuffer::InstanceBuffer()
             std::cerr << "Failed to create instance buffer. HRESULT: " << std::hex << hr << std::endl;
 
         }
-    }
+    
 }
 
 void InstanceBuffer::UpdateBuffer()

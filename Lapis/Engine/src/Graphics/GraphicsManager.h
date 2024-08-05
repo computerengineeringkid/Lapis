@@ -25,7 +25,10 @@ public:
     void CreateMaterialBuffer();
     void UpdateConstantBuffer(const DirectX::XMMATRIX& viewMatrix, const DirectX::XMMATRIX& projectionMatrix);
     void UpdateMaterialBuffer(const std::vector<DirectX::XMFLOAT4>& materials);
+    void InitializeRasterizer();
     std::vector<DirectX::XMFLOAT4>& GetMaterials() { return m_Materials; }
+    wrl::ComPtr<ID3D11RasterizerState> GetWireFrameRS() { return m_WireframeRS; }
+    wrl::ComPtr<ID3D11RasterizerState> GetSolidRS() { return m_SolidRS; }
 
     ID3D11Device* GetDevice() const;
     ID3D11DeviceContext* GetDeviceContext() const;
@@ -36,12 +39,18 @@ private:
     GraphicsManager& operator=(const GraphicsManager&) = delete;
     void SetViewport(float width, float height);
 
+    
+    
+
     wrl::ComPtr<ID3D11Device> m_Device;
     wrl::ComPtr<ID3D11DeviceContext> m_DeviceContext;
     wrl::ComPtr<IDXGISwapChain> m_SwapChain;
     wrl::ComPtr<ID3D11RenderTargetView> m_RenderTargetView;
     wrl::ComPtr<ID3D11DepthStencilView> m_DepthStencilView;
     wrl::ComPtr<ID3D11DepthStencilState> m_DepthStencilState;
+    wrl::ComPtr<ID3D11RasterizerState> m_WireframeRS;
+    wrl::ComPtr<ID3D11RasterizerState> m_SolidRS;
+
     wrl::ComPtr<ID3D11Texture2D> m_DepthStencilBuffer;
     wrl::ComPtr<ID3D11Buffer> m_ConstantBuffer;
     wrl::ComPtr<ID3D11Buffer> m_MaterialBuffer;

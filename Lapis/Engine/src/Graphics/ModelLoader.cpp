@@ -18,7 +18,7 @@
 #include <assimp/postprocess.h>
 #include <assimp/material.h>
 
-void ModelLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene, std::vector<Vertex>& vertices, std::vector<unsigned int>& indices)
+void ModelLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene, std::vector<Vertex>& vertices, std::vector<unsigned short>& indices)
 {
     DirectX::XMFLOAT4 defaultColor(1.0f, 1.0f, 1.0f, 1.0f); // Default to white color if no material color
 
@@ -62,12 +62,23 @@ void ModelLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene, std::vector<Ve
     {
         aiFace face = mesh->mFaces[i];
         for (unsigned int j = 0; j < face.mNumIndices; j++)
-            indices.push_back(face.mIndices[j]);
+            const aiFace& face = mesh->mFaces[i];
+            assert(face.mNumIndices == 3); 
+            indices.push_back(face.mIndices[0]);
+            indices.push_back(face.mIndices[1]);
+            indices.push_back(face.mIndices[2]);
     }
 }
 
-void ModelLoader::ProcessNode(aiNode* node, const aiScene* scene, std::vector<Vertex>& vertices, std::vector<unsigned int>& indices)
+void ModelLoader::ProcessNode(aiNode* node, const aiScene* scene, std::vector<Vertex>& vertices, std::vector<unsigned short>& indices)
 {
+    DirectX::XMMATRIX nodeTransform = DirectX::XMMatrixIdentity(); // Identity Matrix for root node
+    if (node->mParent != nullptr)
+    {
+        // Calculate transformation relative to parent
+        nodeTransform = XMLoadFloat4x4((DirectX::XMFLOAT4X4*)&node->mTransformation) * XMLoadFloat4x4((DirectX::XMFLOAT4X4*)&node->mParent->mTransformation);
+    }
+
     for (unsigned int i = 0; i < node->mNumMeshes; i++)
     {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
@@ -80,10 +91,10 @@ void ModelLoader::ProcessNode(aiNode* node, const aiScene* scene, std::vector<Ve
     }
 }
 
-void ModelLoader::LoadModel(const std::string& path, std::vector<Vertex>& vertices, std::vector<unsigned int>& indices)
+void ModelLoader::LoadModel(const std::string& path, std::vector<Vertex>& vertices, std::vector<unsigned short>& indices)
 {
     Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType);
+    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_JoinIdenticalVertices);
 
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
