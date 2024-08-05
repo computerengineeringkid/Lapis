@@ -1,0 +1,7 @@
+[submodule "Lapis/Engine/ExternalDependencies/assimp"]
+    path = Lapis/Engine/ExternalDependencies/assimp
+    url = https://github.com/BilliamsFluster/AssimpPremake.git
+
+[submodule "Lapis/Engine/ExternalDependencies/imgui"]
+    path = Lapis/Engine/ExternalDependencies/imgui
+    url = https://github.com/BilliamsFluster/imgui.git
